@@ -69,3 +69,18 @@ class SimpleTest(TestCase):
 		self._page_edit(title, content1, description1)
 		self._page_edit(title, content2, description2)
 		self._page_edit(title, content3, description3)
+
+	def test_edit_crash(self):
+		title = u"Crash page"
+		self._page_edit(title, content1, description1)
+		p = models.Page.objects.get(title=title)
+		first_revision = p.last_revision()
+		self._page_edit(title, content2, description2)
+		client = Client()
+		# attempt to save a new version with an outdated base revision
+		r = client.post(reverse('pawiki-page-edit', kwargs={'title': title}),
+				{'content': content3, 'description': description3, 'prev_revision': first_revision.pk})
+		if r.status_code == 200:
+			print r.content
+		self.assertEqual(r.status_code, 302)
+
