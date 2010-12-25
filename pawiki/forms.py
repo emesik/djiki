@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext as _
 from . import models
 
 class PageEditForm(forms.ModelForm):
@@ -27,3 +28,9 @@ class PageEditForm(forms.ModelForm):
 			raise forms.ValidationError(_("Somebody else has modified this page in the meantime. "\
 					"Stash your changes somewhere else and reapply wit the latest revision."))
 		return self.cleaned_data
+
+	def save(self, *args, **kwargs):
+		if not self.page.pk:
+			self.page.save()
+			self.instance.page = self.page
+		super(PageEditForm, self).save(*args, **kwargs)

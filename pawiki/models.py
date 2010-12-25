@@ -13,20 +13,27 @@ class Page(models.Model):
 		return self.title
 
 	def last_revision(self):
-		return self.revisions.order_by('-created')[0]
+		try:
+			return self.revisions.order_by('-created')[0]
+		except IndexError:
+			return None
 
 	def last_change(self):
-		return self.last_revision().created
+		last = self.last_revision()
+		if last:
+			return last.created
 
 	def last_author(self):
-		return self.last_revision().author
+		last = self.last_revision()
+		if last:
+			return last.author
 
 
 class PageRevision(models.Model):
 	page = models.ForeignKey(Page, related_name='revisions')
 	content = models.TextField(_("Content"), blank=True)
 	created = models.DateTimeField(_("Created"), auto_now_add=True)
-	author = models.ForeignKey(User, label=_("Author"))
+	author = models.ForeignKey(User, verbose_name=_("Author"), null=True, blank=True)
 	description = models.CharField(_("Description"), max_length=400, blank=True)
 
 	class Meta:

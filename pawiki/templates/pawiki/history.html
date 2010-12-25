@@ -1,0 +1,28 @@
+{% extends 'pawiki/base_page.html' %}
+{% load i18n %}
+{% block title %}{% trans "Page history" %}: {{ block.super }}{% endblock %}
+{% block pawiki_main %}
+<div class="page history">
+	<table>
+		<thead>
+			<tr>
+				<th>{% trans "Modification time" %}</th>
+				<th>{% trans "Author" %}</th>
+				<th>{% trans "Description" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for revision in history %}
+			<tr>
+				<td>{{ revision.created }}</td>
+				<td>
+					{% if revision.author %}{{ revision.author }}
+					{% else %}<em>{% trans "anonymous" %}</em>{% endif %}
+				</td>
+				<td>{{ revision.description }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

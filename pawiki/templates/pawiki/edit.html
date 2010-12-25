@@ -1,0 +1,12 @@
+{% extends 'pawiki/base_page.html' %}
+{% load i18n %}
+{% block title %}{% trans "Edit page" %}: {{ block.super }}{% endblock %}
+{% block pawiki_main %}
+<div class="page edit">
+	<form action="" method="post">
+		{% csrf_token %}
+		{{ form }}
+		<button type="submit">{% trans "Save" %}</button>
+	</form>
+</div>
+{% endblock %}
