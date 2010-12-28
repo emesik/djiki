@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from . import parser
+
 class Page(models.Model):
 	title = models.CharField(_("Title"), max_length=256, unique=True)
 	rendered_content = models.TextField(_("Rendered content"), blank=True)
@@ -44,6 +46,6 @@ class PageRevision(models.Model):
 
 def render_content(sender, instance=None, **kwargs):
 	# XXX: add real parser here
-	instance.page.rendered_content = instance.content
+	instance.page.rendered_content = parser.render(instance.content)
 	instance.page.save()
 models.signals.post_save.connect(render_content, sender=PageRevision)
