@@ -1,0 +1,10 @@
+{% extends 'djiki/base.html' %}
+{% load i18n %}
+{% block title %}{{ page.title }} | {{ block.super }}{% endblock %}
+{% block djiki_actions %}
+<ul>
+	<li><a href="{% url djiki-page-view page.title %}">{% trans "Page" %}</a></li>
+	<li><a href="{% url djiki-page-edit page.title %}">{% trans "Edit page" %}</a></li>
+	<li><a href="{% url djiki-page-history page.title %}">{% trans "History" %}</a></li>
+</ul>
+{% endblock %}

@@ -46,9 +46,9 @@ class SimpleTest(TestCase):
 			prev_rev = models.PageRevision.objects.filter(page__title=title).order_by('-created')[0].pk
 		except IndexError:
 			prev_rev = ''
-		r = client.get(reverse('pawiki-page-edit', kwargs={'title': title}))
+		r = client.get(reverse('djiki-page-edit', kwargs={'title': title}))
 		self.assertEqual(r.status_code, 200)
-		r = client.post(reverse('pawiki-page-edit', kwargs={'title': title}),
+		r = client.post(reverse('djiki-page-edit', kwargs={'title': title}),
 				{'content': content, 'description': description, 'prev_revision': prev_rev})
 		self.assertEqual(r.status_code, 302)
 		p = models.Page.objects.get(title=title)
@@ -78,7 +78,7 @@ class SimpleTest(TestCase):
 		self._page_edit(title, content2, description2)
 		client = Client()
 		# attempt to save a new version with an outdated base revision
-		r = client.post(reverse('pawiki-page-edit', kwargs={'title': title}),
+		r = client.post(reverse('djiki-page-edit', kwargs={'title': title}),
 				{'content': content3, 'description': description3, 'prev_revision': first_revision.pk})
 		if r.status_code == 200:
 			print r.content

@@ -6,7 +6,7 @@ from . import models, forms
 
 def view(request, title):
 	page = get_object_or_404(models.Page, title=title)
-	return direct_to_template(request, 'pawiki/view.html', {'page': page})
+	return direct_to_template(request, 'djiki/view.html', {'page': page})
 
 def edit(request, title):
 	try:
@@ -24,10 +24,10 @@ def edit(request, title):
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect(
-					reverse('pawiki-page-view', kwargs={'title': title}))
-	return direct_to_template(request, 'pawiki/edit.html', {'form': form, 'page': page})
+					reverse('djiki-page-view', kwargs={'title': title}))
+	return direct_to_template(request, 'djiki/edit.html', {'form': form, 'page': page})
 
 def history(request, title):
 	page = get_object_or_404(models.Page, title=title)
 	history = page.revisions.order_by('-created')
-	return direct_to_template(request, 'pawiki/history.html', {'page': page, 'history': history})
+	return direct_to_template(request, 'djiki/history.html', {'page': page, 'history': history})
