@@ -5,7 +5,10 @@ from django.shortcuts import get_object_or_404
 from . import models, forms
 
 def view(request, title):
-	page = get_object_or_404(models.Page, title=title)
+	try:
+		page = models.Page.objects.get(title=title)
+	except models.Page.DoesNotExist:
+		return direct_to_template(request, 'djiki/not_found.html', {'title': title})
 	return direct_to_template(request, 'djiki/view.html', {'page': page})
 
 def edit(request, title):

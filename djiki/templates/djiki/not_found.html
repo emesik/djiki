@@ -1,0 +1,14 @@
+{% extends 'djiki/base.html' %}
+{% load i18n %}
+{% block djiki_main %}
+<p>
+{% blocktrans %}The page with title <strong>{{ title }}</strong> does not exist.
+Please make sure your spelling is correct.
+{% endblocktrans %}
+</p>
+<p>{% url djiki-page-edit title as edit_url %}
+{% blocktrans %}You may also <a href="{{ edit_url }}">create a new page</a>
+named <strong>{{ title }}</strong>.
+{% endblocktrans %}
+</p>
+{% endblock %}
