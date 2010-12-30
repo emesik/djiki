@@ -11,6 +11,17 @@ a {
 fieldset {
 	border: 0;
 }
+#header h1 {
+	height: 60px;
+	background: transparent url('../img/djiki-logo.png') 100% 0 no-repeat;
+}
+	#header h1 span {
+		display: none;
+	}
+	#header .desc {
+		margin-top: 60px;
+		font-style: italic;
+	}
 .djiki {
 }
 	.djiki .actions {
