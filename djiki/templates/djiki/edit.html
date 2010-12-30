@@ -2,11 +2,17 @@
 {% load i18n %}
 {% block title %}{% trans "Edit page" %}: {{ block.super }}{% endblock %}
 {% block djiki_main %}
-<div class="page edit">
-	<form action="" method="post">
-		{% csrf_token %}
-		{{ form }}
-		<button type="submit">{% trans "Save" %}</button>
-	</form>
+<div class="page edit grid_12">
+	<div class="content">
+		<form action="" method="post">
+			<fieldset>
+				{% csrf_token %}
+				{{ form.as_p }}
+			</fieldset>
+			<div class="buttons">
+				<button type="submit">{% trans "Save" %}</button>
+			</div>
+		</form>
+	</div>
 </div>
 {% endblock %}

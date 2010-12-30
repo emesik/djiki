@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 {% block page %}
 <div class="djiki">
-	<div class="actions">
-	{% block djiki_actions %}{% endblock %}
+	<div class="actions container_12">
+		<div class="grid_12">
+		{% block djiki_actions %}{% endblock %}
+		</div>
+		<div class="clear"></div>
 	</div>
-	<div class="main">
-	{% block djiki_main %}{% endblock %}
+	<div class="main container_12">
+		{% block djiki_main %}{% endblock %}
+		<div class="clear"></div>
 	</div>
 </div>
 {% endblock %}
