@@ -1,3 +1,12 @@
+Djiki
+=====
+Djiki is a lightweight, portable Wiki engine based on Django.
+
+Features:
+    * Creole markup,
+    * anonymous and registered edits,
+    * automatic merges of parallel edits when possible.
+
 Requirements
 ------------
 
@@ -6,3 +15,14 @@ Requirements
 
     * WikiCreole parser in Python:
       http://oink.sheep.art.pl/WikiCreole%20parser%20in%20python
+
+Roadmap
+-------
+
+    * support for including images
+    * older versions view, with diffs
+    * simple reverts
+    * ACLs: block anonymous edits, limit access to groups
+    * more markup backends; MediaWiki is the main priority
+    * page operations: rename, delete
+    * translations
