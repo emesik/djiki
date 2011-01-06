@@ -102,6 +102,8 @@ INSTALLED_APPS = (
 	'djiki',
 )
 
+DJIKI_IMAGES_PATH = 'djimages/'		# relative to MEDIA_ROOT
+
 try:
 	execfile(os.path.join(PROJECT_ROOT, 'local_settings.py'))
 except IOError:
