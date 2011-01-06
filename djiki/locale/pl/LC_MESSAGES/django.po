@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: djiki\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-06 23:54+0100\n"
+"PO-Revision-Date: 2011-01-07 00:02+0100\n"
+"Last-Translator: Michał Sałaban <michal@salaban.info>\n"
+"Language-Team: Michał Sałaban <michal@salaban.info>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Language: Polish\n"
+
+#: forms.py:40
+msgid "Somebody else has modified this page in the meantime. It is not possible to merge all the changes automatically. Stash your version somewhere else and reapply with the latest revision."
+msgstr "Podczas Twojej edycji ktoś dokonal zmian na tej stronie. Nie było możliwe automatyczne połączenie obu wersji. Zachowaj wprowadzoną treść w innym miejscu, a następnie nanieś swoje zmiany ręcznie biorąc ostatnią wersję jako podstawę."
+
+#: forms.py:76
+msgid "Somebody else has modified this image in the meantime. Please review these changes before uploading your version."
+msgstr "Podczas Twojej edycji ktoś dokonał zmian w tym obrazie. Sprawdź ostatnią wersję przed wysłaniem swojego pliku."
+
+#: forms.py:88
+#: models.py:59
+msgid "Name"
+msgstr "Nazwa"
+
+#: forms.py:89
+msgid "If you leave it empty, the original name of the uploaded file will be used."
+msgstr "Jeśli nie wypełnisz, użyta zostanie oryginalna nazwa wysyłanego pliku."
+
+#: forms.py:103
+msgid "An image of the same name already exists. Please enter different name."
+msgstr "Obraz o tej nazwie już istnieje. Podaj inną nazwę."
+
+#: models.py:25
+msgid "Created"
+msgstr "Utworzono"
+
+#: models.py:26
+#: templates/djiki/history.html:12
+#: templates/djiki/image_history.html:12
+msgid "Author"
+msgstr "Autor"
+
+#: models.py:27
+#: templates/djiki/history.html:13
+#: templates/djiki/image_history.html:14
+msgid "Description"
+msgstr "Opis"
+
+#: models.py:35
+msgid "Title"
+msgstr "Tytuł"
+
+#: models.py:36
+msgid "Rendered content"
+msgstr ""
+
+#: models.py:47
+msgid "Content"
+msgstr "Treść"
+
+#: models.py:67
+msgid "File"
+msgstr "Plik"
+
+#: templates/djiki/base_image.html:3
+#: templates/djiki/base_image.html.py:6
+msgid "Image"
+msgstr "Obraz"
+
+#: templates/djiki/base_image.html:7
+msgid "Edit image"
+msgstr "Edytuj obraz"
+
+#: templates/djiki/base_image.html:8
+#: templates/djiki/base_page.html:8
+msgid "History"
+msgstr "Historia"
+
+#: templates/djiki/base_image.html:9
+#: templates/djiki/base_page.html:9
+msgid "Upload"
+msgstr "Wyślij plik"
+
+#: templates/djiki/base_page.html:6
+msgid "Page"
+msgstr "Strona"
+
+#: templates/djiki/base_page.html:7
+#: templates/djiki/edit.html:3
+msgid "Edit page"
+msgstr "Edytuj stronę"
+
+#: templates/djiki/edit.html:14
+#: templates/djiki/image_edit.html:13
+msgid "Save"
+msgstr "Zapisz"
+
+#: templates/djiki/history.html:3
+msgid "Page history"
+msgstr "Historia strony"
+
+#: templates/djiki/history.html:11
+#: templates/djiki/image_history.html:11
+msgid "Modification time"
+msgstr "Czas modyfikacji"
+
+#: templates/djiki/history.html:22
+#: templates/djiki/image_history.html:23
+msgid "anonymous"
+msgstr "anonim"
+
+#: templates/djiki/image_edit.html:3
+#: templates/djiki/image_edit.html.py:7
+msgid "New image"
+msgstr "Nowy obraz"
+
+#: templates/djiki/image_history.html:3
+msgid "Image history"
+msgstr "Historia obrazu"
+
+#: templates/djiki/image_history.html:13
+msgid "Thumbnail"
+msgstr "Miniatura"
+
+#: templates/djiki/not_found.html:5
+#, python-format
+msgid ""
+"The page with title <strong>%(title)s</strong> does not exist.\n"
+"Please make sure your spelling is correct.\n"
+msgstr "Strona o tytule <strong>%(title)s</strong> nie istnieje. Upewnij się, że podany tytuł jest prawidłowy.\n"
+
+#: templates/djiki/not_found.html:10
+#, python-format
+msgid ""
+"You may also <a href=\"%(edit_url)s\">create a new page</a>\n"
+"named <strong>%(title)s</strong>.\n"
+msgstr "Możesz też <a href=\"%(edit_url)s\">stworzyć nową stronę</a> o tytule <strong>%(title)s</strong>.\n"
+
