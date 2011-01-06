@@ -48,3 +48,46 @@ class PageEditForm(forms.ModelForm):
 			self.page.save()
 			self.instance.page = self.page
 		super(PageEditForm, self).save(*args, **kwargs)
+
+
+class ImageUploadForm(forms.ModelForm):
+	prev_revision = forms.ModelChoiceField(
+		queryset=models.ImageRevision.objects.none(),
+		widget=forms.HiddenInput(),
+		required=False
+		)
+
+	class Meta:
+		model = models.ImageRevision
+		fields = ('file', 'description')
+
+	def __init__(self, *args, **kwargs):
+		self.image = kwargs.pop('image')
+		super(ImageUploadForm, self).__init__(*args, **kwargs)
+		if self.image.pk:
+			self.fields['prev_revision'].queryset = self.image.revisions.all()
+			self.fields['prev_revision'].initial = self.image.last_revision()
+
+	def save(self, *args, **kwargs):
+		if not self.image.pk:
+			self.image.save()
+		self.instance.image = self.image
+		super(ImageUploadForm, self).save(*args, **kwargs)
+
+
+class NewImageUploadForm(forms.ModelForm):
+	name = forms.CharField(label=_("Name"), max_length=128, required=False,
+			help_text=_("If you leave it empty, the original name of the uploaded file will be used."))
+
+	class Meta:
+		model = models.ImageRevision
+		fields = ('name', 'file', 'description')
+
+	def save(self, *args, **kwargs):
+		name = self.cleaned_data['name']
+		if not name:
+			name = self.cleaned_data['file']
+		image = models.Image(name=name)
+		image.save()
+		self.instance.image = image
+		super(NewImageUploadForm, self).save(*args, **kwargs)

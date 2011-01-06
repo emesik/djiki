@@ -52,3 +52,17 @@ fieldset {
 		.djiki .page .content {
 			margin: 10px;
 		}
+
+/* styles used inside the page contents - might me moved to a separate file */
+.djiki .page .content .image {
+	border: 1px solid #e0e0e0;
+	background: #f0f0f0;
+	margin: 10px 0;
+	padding: 3px;
+	float: left;
+}
+	.djiki .page .content .image .title {
+		margin: 5px 0;
+		padding: 0;
+		font-size: 80%;
+	}

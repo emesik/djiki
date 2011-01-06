@@ -3,9 +3,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from . import parser
-
-
 class Versioned(object):
 	def last_revision(self):
 		try:
@@ -52,10 +49,10 @@ class PageRevision(Revision):
 	def __unicode__(self):
 		return u"%s: %s" % (self.page, self.description)
 
-def render_page_content(sender, instance=None, **kwargs):
-	instance.page.rendered_content = parser.render(instance.content)
+def invalidate_content(sender, instance=None, **kwargs):
+	instance.page.rendered_content = ''
 	instance.page.save()
-models.signals.post_save.connect(render_page_content, sender=PageRevision)
+models.signals.post_save.connect(invalidate_content, sender=PageRevision)
 
 
 class Image(models.Model, Versioned):

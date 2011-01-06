@@ -16,6 +16,11 @@ Requirements
     * WikiCreole parser in Python:
       http://oink.sheep.art.pl/WikiCreole%20parser%20in%20python
 
+    * sorl-thumbnail:
+      *It is used in the example project, but you may run djiki
+      with any other thumbnailing module or without one at all.*
+      https://github.com/sorl/sorl-thumbnail
+
 Roadmap
 -------
 

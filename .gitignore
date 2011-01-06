@@ -3,3 +3,4 @@
 *.py[co]
 *.swp
 *.db
+media/djimages
