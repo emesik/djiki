@@ -3,9 +3,10 @@ Djiki
 Djiki is a lightweight, portable Wiki engine based on Django.
 
 Features:
-    * Creole markup with minor extension for images (see below),
+    * Creole markup,
     * anonymous and registered edits,
-    * automatic merges of parallel edits when possible.
+    * automatic merges of parallel edits when possible,
+    * inclusion of images.
 
 Requirements
 ------------
@@ -33,7 +34,6 @@ still valid, however you may add size by typing
 Roadmap
 -------
 
-    * support for including images
     * older versions view, with diffs
     * simple reverts
     * ACLs: block anonymous edits, limit access to groups
