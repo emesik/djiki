@@ -104,6 +104,7 @@ INSTALLED_APPS = (
 )
 
 DJIKI_IMAGES_PATH = 'djimages/'		# relative to MEDIA_ROOT
+DJIKI_ALLOW_ANONYMOUS_EDITS = True
 
 try:
 	execfile(os.path.join(PROJECT_ROOT, 'local_settings.py'))

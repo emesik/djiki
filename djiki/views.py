@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.views.generic.simple import direct_to_template
 from django.shortcuts import get_object_or_404
 from . import models, forms, parser
@@ -15,6 +15,8 @@ def view(request, title):
 	return direct_to_template(request, 'djiki/view.html', {'page': page})
 
 def edit(request, title):
+	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+		return HttpResponseForbidden()
 	try:
 		page = models.Page.objects.get(title=title)
 		last_content = page.last_revision().content
@@ -39,6 +41,8 @@ def history(request, title):
 	return direct_to_template(request, 'djiki/history.html', {'page': page, 'history': history})
 
 def image_new(request):
+	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+		return HttpResponseForbidden()
 	form = forms.NewImageUploadForm(data=request.POST or None, files=request.FILES or None)
 	if request.method == 'POST':
 		if form.is_valid():
@@ -51,11 +55,9 @@ def image_view(request, name):
 	image = get_object_or_404(models.Image, name=name)
 	return direct_to_template(request, 'djiki/image_view.html', {'image': image})
 
-def image_serve(request, name):
-	image = get_object_or_404(models.Image, name=name)
-	return HttpResponseRedirect("%s/%s" % (settings.MEDIA_URL, image.last_revision().file))
-
 def image_edit(request, name):
+	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+		return HttpResponseForbidden()
 	image = get_object_or_404(models.Image, name=name)
 	revision = models.ImageRevision(image=image,
 			author=request.user if request.user.is_authenticated() else None)
