@@ -68,6 +68,15 @@ class ImageUploadForm(forms.ModelForm):
 			self.fields['prev_revision'].queryset = self.image.revisions.all()
 			self.fields['prev_revision'].initial = self.image.last_revision()
 
+	def clean(self):
+		base_revision = self.cleaned_data.get('prev_revision')
+		last_revision = self.image.last_revision()
+		if base_revision != last_revision:
+			raise forms.ValidationError(
+					_("Somebody else has modified this image in the meantime. Please "\
+					"review these changes before uploading your version."))
+		return self.cleaned_data
+
 	def save(self, *args, **kwargs):
 		if not self.image.pk:
 			self.image.save()
@@ -83,11 +92,20 @@ class NewImageUploadForm(forms.ModelForm):
 		model = models.ImageRevision
 		fields = ('name', 'file', 'description')
 
-	def save(self, *args, **kwargs):
+	def _get_name(self):
 		name = self.cleaned_data['name']
 		if not name:
 			name = self.cleaned_data['file']
-		image = models.Image(name=name)
+		return name
+
+	def clean(self):
+		if models.Image.objects.filter(name=self._get_name()).exists():
+			raise forms.ValidationError(_("An image of the same name already exists. Please enter "\
+					"different name."))
+		return self.cleaned_data
+
+	def save(self, *args, **kwargs):
+		image = models.Image(name=self._get_name())
 		image.save()
 		self.instance.image = image
 		super(NewImageUploadForm, self).save(*args, **kwargs)

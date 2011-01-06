@@ -57,8 +57,10 @@ def image_serve(request, name):
 
 def image_edit(request, name):
 	image = get_object_or_404(models.Image, name=name)
-	form = forms.ImageUploadForm(data=request.POST or None, files=request.POST or None,
-			instance=image.last_revision(), image=image)
+	revision = models.ImageRevision(image=image,
+			author=request.user if request.user.is_authenticated() else None)
+	form = forms.ImageUploadForm(data=request.POST or None, files=request.FILES or None,
+			instance=revision, image=image)
 	if request.method == 'POST':
 		if form.is_valid():
 			form.save()
@@ -67,4 +69,6 @@ def image_edit(request, name):
 	return direct_to_template(request, 'djiki/image_edit.html', {'form': form})
 
 def image_history(request, name):
-	pass
+	image = get_object_or_404(models.Image, name=name)
+	history = image.revisions.order_by('-created')
+	return direct_to_template(request, 'djiki/image_history.html', {'image': image, 'history': history})
