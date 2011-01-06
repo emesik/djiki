@@ -16,7 +16,11 @@
 			<tbody>
 				{% for revision in history %}
 				<tr>
-					<td>{{ revision.created }}</td>
+					<td>
+						<a href="{% url djiki-page-revision page.title revision.pk %}" title="{% trans "View" %}">
+						{{ revision.created }}
+						</a>
+					</td>
 					<td>
 						{% if revision.author %}{{ revision.author }}
 						{% else %}<em>{% trans "anonymous" %}</em>{% endif %}

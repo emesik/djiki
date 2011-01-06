@@ -1,10 +1,20 @@
 {% extends 'djiki/base_page.html' %}
-{% load djiki_tags %}
+{% load i18n djiki_tags %}
 {% block djiki_main %}
 <div class="page content grid_12">
 	<div class="content">
 		<h1>{{ page.title }}</h1>
-		{{ page.last_revision.content|djiki_markup }}
+		{% if not is_latest %}
+		<p class="notice warning">
+		{% url djiki-page-view page.title as latest_url %}
+		{% blocktrans %}
+		The version you are viewing is not the latest one, but represents an older revision
+		of this page, which may have been significantly modified.<br />
+		<a href="{{ latest_url }}">Proceed to the latest version.</a>
+		{% endblocktrans %}
+		</p>
+		{% endif %}
+		{{ revision.content|djiki_markup }}
 	</div>
 </div>
 {% endblock %}

@@ -5,12 +5,22 @@ from django.views.generic.simple import direct_to_template
 from django.shortcuts import get_object_or_404
 from . import models, forms
 
-def view(request, title):
+def view(request, title, revision_pk=None):
 	try:
 		page = models.Page.objects.get(title=title)
 	except models.Page.DoesNotExist:
 		return direct_to_template(request, 'djiki/not_found.html', {'title': title})
-	return direct_to_template(request, 'djiki/view.html', {'page': page})
+	if revision_pk:
+		try:
+			revision = page.revisions.get(pk=revision_pk)
+		except models.PageRevision.DoesNotExist:
+			return HttpResponseNotFound()
+		is_latest = False
+	else:
+		revision = page.last_revision()
+		is_latest = True
+	return direct_to_template(request, 'djiki/view.html',
+			{'page': page, 'revision': revision, 'is_latest': is_latest})
 
 def edit(request, title):
 	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():

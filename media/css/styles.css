@@ -53,6 +53,18 @@ fieldset {
 			margin: 10px;
 		}
 
+.notice {
+	border-width: 1px 1px 1px 5px;
+	border-style: solid;
+	border-color: gray;
+	padding: 5px 10px;
+}
+
+.notice.warning {
+	background-color: #fee;
+	border-color: #f88;
+}
+
 /* styles used inside the page contents - might me moved to a separate file */
 .djiki .page .content .image {
 	border: 1px solid #e0e0e0;
