@@ -15,9 +15,14 @@ fieldset {
 	height: 60px;
 	background: transparent url('../img/djiki-logo.png') 100% 0 no-repeat;
 }
-	#header h1 span {
-		display: none;
+	#header h1 a {
+		display: block;
+		height: 60px;
+		min-width: 46px;
 	}
+		#header h1 a span {
+			display: none;
+		}
 	#header .desc {
 		margin-top: 60px;
 		font-style: italic;

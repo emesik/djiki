@@ -2,7 +2,8 @@
 {% block djiki_main %}
 <div class="page content grid_12">
 	<div class="content">
-{{ page.rendered_content|safe }}
+		<h1>{{ page.title }}</h1>
+		{{ page.rendered_content|safe }}
 	</div>
 </div>
 {% endblock %}
