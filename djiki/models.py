@@ -33,7 +33,6 @@ class Revision(models.Model):
 
 class Page(models.Model, Versioned):
 	title = models.CharField(_("Title"), max_length=256, unique=True)
-	rendered_content = models.TextField(_("Rendered content"), blank=True)
 
 	class Meta:
 		ordering = ('title',)
