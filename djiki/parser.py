@@ -4,7 +4,7 @@ from creole.html_emitter import HtmlEmitter
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 
-from . import models
+from . import models, utils
 
 class DjikiHtmlEmitter(HtmlEmitter):
 	image_params_re = re.compile(r'^(?:(?P<size>[0-9]+x[0-9]+)(?:\||$))?(?P<title>.*)$')
@@ -24,8 +24,9 @@ class DjikiHtmlEmitter(HtmlEmitter):
 				raise NotImplementedError
 		else:
 			try:
-				image = models.Image.objects.get(name=target)
+				image = models.Image.objects.get(name=utils.deurlize_title(target))
 				ctx['image'] = image
+				ctx['url_name'] = utils.urlize_title(image.name)
 			except models.Image.DoesNotExist:
 				pass
 		return render_to_string('djiki/parser/image.html', ctx)

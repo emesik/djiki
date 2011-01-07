@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
-	(r'^$', 'django.views.generic.simple.redirect_to', {'url': u'/wiki/Main Page'}),
+	(r'^$', 'django.views.generic.simple.redirect_to', {'url': u'/wiki/Main_Page'}),
 	(r'^wiki/', include('djiki.urls')),
 )
 

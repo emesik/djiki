@@ -3,13 +3,17 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.views.generic.simple import direct_to_template
 from django.shortcuts import get_object_or_404
-from . import models, forms
+from . import models, forms, utils
 
 def view(request, title, revision_pk=None):
+	url_title = utils.urlize_title(title)
+	if title != url_title:
+		return HttpResponseRedirect(reverse('djiki-page-view', kwargs={'title': url_title}))
+	page_title = utils.deurlize_title(title)
 	try:
-		page = models.Page.objects.get(title=title)
+		page = models.Page.objects.get(title=page_title)
 	except models.Page.DoesNotExist:
-		return direct_to_template(request, 'djiki/not_found.html', {'title': title})
+		return direct_to_template(request, 'djiki/not_found.html', {'title': page_title})
 	if revision_pk:
 		try:
 			revision = page.revisions.get(pk=revision_pk)
@@ -25,11 +29,15 @@ def view(request, title, revision_pk=None):
 def edit(request, title):
 	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
 		return HttpResponseForbidden()
+	url_title = utils.urlize_title(title)
+	if title != url_title:
+		return HttpResponseRedirect(reverse('djiki-page-edit', kwargs={'title': url_title}))
+	page_title = utils.deurlize_title(title)
 	try:
-		page = models.Page.objects.get(title=title)
+		page = models.Page.objects.get(title=page_title)
 		last_content = page.last_revision().content
 	except models.Page.DoesNotExist:
-		page = models.Page(title=title)
+		page = models.Page(title=page_title)
 		last_content = ''
 	revision = models.PageRevision(page=page,
 			author=request.user if request.user.is_authenticated() else None)
@@ -60,13 +68,21 @@ def image_new(request):
 	return direct_to_template(request, 'djiki/image_edit.html', {'form': form})
 
 def image_view(request, name):
-	image = get_object_or_404(models.Image, name=name)
+	url_name = utils.urlize_title(name)
+	if name != url_name:
+		return HttpResponseRedirect(reverse('djiki-image-view', kwargs={'name': url_name}))
+	image_name = utils.deurlize_title(name)
+	image = get_object_or_404(models.Image, name=image_name)
 	return direct_to_template(request, 'djiki/image_view.html', {'image': image})
 
 def image_edit(request, name):
 	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
 		return HttpResponseForbidden()
-	image = get_object_or_404(models.Image, name=name)
+	url_name = utils.urlize_title(name)
+	if name != url_name:
+		return HttpResponseRedirect(reverse('djiki-image-edit', kwargs={'name': url_name}))
+	image_name = utils.deurlize_title(name)
+	image = get_object_or_404(models.Image, name=image_name)
 	revision = models.ImageRevision(image=image,
 			author=request.user if request.user.is_authenticated() else None)
 	form = forms.ImageUploadForm(data=request.POST or None, files=request.FILES or None,
@@ -75,10 +91,14 @@ def image_edit(request, name):
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect(
-					reverse('djiki-image-view', kwargs={'name': form.instance.image.name}))
+					reverse('djiki-image-view', kwargs={'name': url_name}))
 	return direct_to_template(request, 'djiki/image_edit.html', {'form': form})
 
 def image_history(request, name):
-	image = get_object_or_404(models.Image, name=name)
+	url_name = utils.urlize_title(name)
+	if name != url_name:
+		return HttpResponseRedirect(reverse('djiki-image-view', kwargs={'name': url_name}))
+	image_name = utils.deurlize_title(name)
+	image = get_object_or_404(models.Image, name=image_name)
 	history = image.revisions.order_by('-created')
 	return direct_to_template(request, 'djiki/image_history.html', {'image': image, 'history': history})

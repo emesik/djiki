@@ -60,6 +60,9 @@ class Image(models.Model, Versioned):
 	class Meta:
 		ordering = ('name',)
 
+	def __unicode__(self):
+		return self.name
+
 
 class ImageRevision(Revision):
 	image = models.ForeignKey(Image, related_name='revisions')

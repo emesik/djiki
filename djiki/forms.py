@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext as _
 from diff_match_patch import diff_match_patch
-from . import models
+from . import models, utils
 
 class PageEditForm(forms.ModelForm):
 	prev_revision = forms.ModelChoiceField(
@@ -95,17 +95,17 @@ class NewImageUploadForm(forms.ModelForm):
 	def _get_name(self):
 		name = self.cleaned_data['name']
 		if not name:
-			name = self.cleaned_data['file']
+			name = unicode(self.cleaned_data['file'])
 		return name
 
 	def clean(self):
-		if models.Image.objects.filter(name=self._get_name()).exists():
+		if models.Image.objects.filter(name=utils.deurlize_title(self._get_name())).exists():
 			raise forms.ValidationError(_("An image of the same name already exists. Please enter "\
 					"different name."))
 		return self.cleaned_data
 
 	def save(self, *args, **kwargs):
-		image = models.Image(name=self._get_name())
+		image = models.Image(name=utils.deurlize_title(self._get_name()))
 		image.save()
 		self.instance.image = image
 		super(NewImageUploadForm, self).save(*args, **kwargs)

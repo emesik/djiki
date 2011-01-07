@@ -22,6 +22,23 @@ Requirements
       with any other thumbnailing module or without one at all.*
       https://github.com/sorl/sorl-thumbnail
 
+Settings
+--------
+
+The following settings configure Djiki's behavior:
+
+``DJIKI_IMAGES_PATH`` — path to images, relative to MEDIA_ROOT.
+
+``DJIKI_ALLOW_ANONYMOUS_EDITS`` — whether unauthorized users are
+able to edit pages.
+
+``DJIKI_SPACES_AS_UNDERSCORES`` — makes Djiki replace whitespaces in
+URLs by underscores. It's a choice between having nice or exact URLs.
+Depending on the settings, the adresses may look as
+``http://djiki.org/wiki/Main_Page`` or ``http://djiki.org/wiki/Main%20Page``
+This setting will also squash multiple spaces into one. It affects image
+names in the same way, too.
+
 Images
 ------
 

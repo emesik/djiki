@@ -106,6 +106,12 @@ INSTALLED_APPS = (
 DJIKI_IMAGES_PATH = 'djimages/'		# relative to MEDIA_ROOT
 DJIKI_ALLOW_ANONYMOUS_EDITS = True
 
+# The following switch will make all whitespaces appear as underscores
+# in URLs. If you want to have nice URLs, leave it enabled. If you wish
+# to keep distinction between space and underscore and have all page
+# names verbatim, disable it.
+DJIKI_SPACES_AS_UNDERSCORES = True
+
 try:
 	execfile(os.path.join(PROJECT_ROOT, 'local_settings.py'))
 except IOError:
