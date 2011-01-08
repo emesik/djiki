@@ -13,6 +13,7 @@
 					<th><button type="submit">{% trans "Compare" %}</button></th>
 					<th>{% trans "Author" %}</th>
 					<th>{% trans "Description" %}</th>
+					<th>{% trans "Operations" %}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,6 +33,10 @@
 						{% else %}<em>{% trans "anonymous" %}</em>{% endif %}
 					</td>
 					<td>{{ revision.description }}</td>
+					<td>
+						<a href="{% url djiki-page-revert page.title revision.pk %}" title="{% trans "Revert to this version by discarding all later modifications." %}">[{% trans "revert" %}]</a>
+						<a href="{% url djiki-page-undo page.title revision.pk %}" title="{% trans "Undo this revision." %}">[{% trans "undo" %}]</a>
+					</td>
 				</tr>
 				{% endfor %}
 			</tbody>

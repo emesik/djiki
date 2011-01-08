@@ -1,14 +1,20 @@
 from diff_match_patch import diff_match_patch
 from django.conf import settings
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 from django.views.generic.simple import direct_to_template
+from urllib import urlencode
 from . import models, forms, utils
 
 def view(request, title, revision_pk=None):
 	url_title = utils.urlize_title(title)
 	if title != url_title:
+		if revision_pk:
+			return HttpResponseRedirect(reverse('djiki-page-revision',
+						kwargs={'title': url_title, 'revision_pk': revision_pk}))
 		return HttpResponseRedirect(reverse('djiki-page-view', kwargs={'title': url_title}))
 	page_title = utils.deurlize_title(title)
 	try:
@@ -20,12 +26,15 @@ def view(request, title, revision_pk=None):
 			revision = page.revisions.get(pk=revision_pk)
 		except models.PageRevision.DoesNotExist:
 			return HttpResponseNotFound()
-		is_latest = False
+		messages.info(request, _("The version you are viewing is not the latest one, "
+				"but represents an older revision of this page, which may have been "
+				"significantly modified. If it is not what you intended to view, "
+				"<a href=\"%(url)s\">proceed to the latest version</a>.") % {
+					'url': reverse('djiki-page-view', kwargs={'title': url_title})})
 	else:
 		revision = page.last_revision()
-		is_latest = True
 	return direct_to_template(request, 'djiki/view.html',
-			{'page': page, 'revision': revision, 'is_latest': is_latest})
+			{'page': page, 'revision': revision})
 
 def edit(request, title):
 	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
@@ -53,12 +62,20 @@ def edit(request, title):
 	return direct_to_template(request, 'djiki/edit.html', {'form': form, 'page': page})
 
 def history(request, title):
-	page = get_object_or_404(models.Page, title=title)
+	url_title = utils.urlize_title(title)
+	if title != url_title:
+		return HttpResponseRedirect(reverse('djiki-page-history', kwargs={'title': url_title}))
+	page_title = utils.deurlize_title(title)
+	page = get_object_or_404(models.Page, title=page_title)
 	history = page.revisions.order_by('-created')
 	return direct_to_template(request, 'djiki/history.html', {'page': page, 'history': history})
 
 def diff(request, title):
-	page = get_object_or_404(models.Page, title=title)
+	url_title = utils.urlize_title(title)
+	if title != url_title:
+		return HttpResponseNotFound()
+	page_title = utils.deurlize_title(title)
+	page = get_object_or_404(models.Page, title=page_title)
 	try:
 		from_rev = page.revisions.get(pk=request.REQUEST['from_revision_pk'])
 		to_rev = page.revisions.get(pk=request.REQUEST['to_revision_pk'])
@@ -68,6 +85,80 @@ def diff(request, title):
 	diff = dmp.diff_compute(from_rev.content, to_rev.content, True, 2)
 	return direct_to_template(request, 'djiki/diff.html',
 			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
+
+def revert(request, title, revision_pk):
+	url_title = utils.urlize_title(title)
+	if title != url_title:
+		return HttpResponseRedirect(
+				reverse('djiki-page-revert', kwargs={'title': url_title, 'revision_pk': revision_pk}))
+	page_title = utils.deurlize_title(title)
+	page = get_object_or_404(models.Page, title=page_title)
+	src_revision = get_object_or_404(models.PageRevision, page=page, pk=revision_pk)
+	new_revision = models.PageRevision(page=page,
+			author=request.user if request.user.is_authenticated() else None)
+	if request.method == 'POST':
+		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('djiki-page-view', kwargs={'title': url_title}))
+	else:
+		if src_revision.author:
+			description = _("Reverted to revision of %(time)s by %(user)s.") % \
+					{'time': src_revision.created, 'user': src_revision.user.username}
+		else:
+			description = _("Reverted to anonymous revision of %(time)s.") % \
+					{'time': src_revision.created}
+		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page,
+				initial={'content': src_revision.content, 'description': description})
+	return direct_to_template(request, 'djiki/edit.html',
+			{'page': page, 'form': form, 'src_revision': src_revision})
+
+def undo(request, title, revision_pk):
+	url_title = utils.urlize_title(title)
+	if title != url_title:
+		return HttpResponseRedirect(
+				reverse('djiki-page-undo', kwargs={'title': url_title, 'revision_pk': revision_pk}))
+	page_title = utils.deurlize_title(title)
+	page = get_object_or_404(models.Page, title=page_title)
+	src_revision = get_object_or_404(models.PageRevision, page=page, pk=revision_pk)
+	new_revision = models.PageRevision(page=page,
+			author=request.user if request.user.is_authenticated() else None)
+	if request.method == 'POST':
+		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('djiki-page-view', kwargs={'title': url_title}))
+	else:
+		if src_revision.author:
+			description = _("Undid revision of %(time)s by %(user)s.") % \
+					{'time': src_revision.created, 'user': src_revision.user.username}
+		else:
+			description = _("Undid anonymous revision of %(time)s.") % {'time': src_revision.created}
+		try:
+			prev_revision = models.PageRevision.objects\
+					.filter(page=page, created__lt=src_revision.created)\
+					.order_by('-created')[0]
+			prev_content = prev_revision.content
+		except IndexError:
+			prev_content = ''
+		dmp = diff_match_patch()
+		rdiff = dmp.patch_make(src_revision.content, prev_content)
+		content, results = dmp.patch_apply(rdiff, page.last_revision().content)
+		if False in results:
+			messages.warning(request, _("It was impossible to automatically undo the change "
+					"you have selected. Perhaps the page has been modified too much in the "
+					"meantime. Review the following content comparison, which represents the "
+					"change you tried to undo, and apply the changes manually to the latest "
+					"revision."))
+			urldata = {'to_revision_pk': src_revision.pk}
+			if prev_revision:
+				urldata['from_revision_pk'] = prev_revision.pk
+			return HttpResponseRedirect("%s?%s" % (
+					reverse('djiki-page-diff', kwargs={'title': url_title}),
+					urlencode(urldata)))
+		form = forms.PageEditForm(data=request.POST or None, page=page,
+				initial={'content': content, 'description': description})
+	return direct_to_template(request, 'djiki/edit.html', {'page': page, 'form': form})
 
 def image_new(request):
 	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():

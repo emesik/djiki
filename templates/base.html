@@ -16,6 +16,19 @@
 			<p class="desc">— a Wiki engine for Django</p>
 		</div>
 	</div>
+	{% block messages %}
+	{% if messages %}
+	<div id="messages" class="container_12">
+		<div class="grid_12">
+			<ul>
+				{% for msg in messages %}
+				<li class="{{ msg.tags }}">{{ msg|safe }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	{% endif %}
+	{% endblock %}
 {% block page %}{% endblock %}
 </body>
 </html>
