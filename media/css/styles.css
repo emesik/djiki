@@ -53,16 +53,23 @@ fieldset {
 			margin: 10px;
 		}
 
-.notice {
-	border-width: 1px 1px 1px 5px;
-	border-style: solid;
-	border-color: gray;
-	padding: 5px 10px;
+#messages ul {
+	list-style-type: none;
+	margin: 0 0 10px 0;
+	padding: 0 15px;
 }
-	.notice.warning {
-		background-color: #fee;
-		border-color: #f88;
+	#messages ul li {
+		border-width: 1px 1px 1px 5px;
+		border-style: solid;
+		border-color: #8f8;
+		background-color: #efe;
+		margin: 3px 0;
+		padding: 5px 10px;
 	}
+		#messages ul li.warning {
+			background-color: #fee;
+			border-color: #f88;
+		}
 
 .help_text {
 	font-size: 75%;
