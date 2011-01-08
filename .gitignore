@@ -4,3 +4,4 @@
 *.swp
 *.db
 media/djimages
+local_settings.py
