@@ -1,7 +1,7 @@
 from diff_match_patch import diff_match_patch
 from django import template
 from django.utils.safestring import mark_safe
-from .. import parser
+from .. import parser, utils
 
 register = template.Library()
 
@@ -22,3 +22,7 @@ def html_diff(diff):
 		elif op == diff_match_patch.DIFF_EQUAL:
 			html.append("<span>%s</span>" % text)
 	return mark_safe("".join(html))
+
+@register.filter
+def urlize_title(title):
+	return utils.urlize_title(title)

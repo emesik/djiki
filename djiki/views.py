@@ -58,7 +58,7 @@ def edit(request, title):
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect(
-					reverse('djiki-page-view', kwargs={'title': title}))
+					reverse('djiki-page-view', kwargs={'title': url_title}))
 	return direct_to_template(request, 'djiki/edit.html', {'form': form, 'page': page})
 
 def history(request, title):
