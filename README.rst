@@ -6,7 +6,10 @@ Features:
     * Creole markup,
     * anonymous and registered edits,
     * automatic merges of parallel edits when possible,
-    * inclusion of images.
+    * inclusion of images,
+    * diff views between revisions,
+    * reverts to any revision in the history,
+    * automatic undos of any historical revision, if possible.
 
 Requirements
 ------------
@@ -51,7 +54,6 @@ still valid, however you may add size by typing
 Roadmap
 -------
 
-    * simple reverts
     * ACLs: block anonymous edits, limit access to groups
     * more markup backends; MediaWiki is the main priority
     * page operations: rename, delete
