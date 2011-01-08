@@ -51,7 +51,6 @@ still valid, however you may add size by typing
 Roadmap
 -------
 
-    * older versions view, with diffs
     * simple reverts
     * ACLs: block anonymous edits, limit access to groups
     * more markup backends; MediaWiki is the main priority

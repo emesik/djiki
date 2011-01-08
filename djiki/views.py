@@ -1,8 +1,9 @@
+from diff_match_patch import diff_match_patch
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.views.generic.simple import direct_to_template
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
+from django.views.generic.simple import direct_to_template
 from . import models, forms, utils
 
 def view(request, title, revision_pk=None):
@@ -55,6 +56,18 @@ def history(request, title):
 	page = get_object_or_404(models.Page, title=title)
 	history = page.revisions.order_by('-created')
 	return direct_to_template(request, 'djiki/history.html', {'page': page, 'history': history})
+
+def diff(request, title):
+	page = get_object_or_404(models.Page, title=title)
+	try:
+		from_rev = page.revisions.get(pk=request.REQUEST['from_revision_pk'])
+		to_rev = page.revisions.get(pk=request.REQUEST['to_revision_pk'])
+	except (KeyError, models.Page.DoesNotExist):
+		return HttpResponseNotFound()
+	dmp = diff_match_patch()
+	diff = dmp.diff_compute(from_rev.content, to_rev.content, True, 2)
+	return direct_to_template(request, 'djiki/diff.html',
+			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
 
 def image_new(request):
 	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
