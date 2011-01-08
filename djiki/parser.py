@@ -9,6 +9,10 @@ from . import models, utils
 class DjikiHtmlEmitter(HtmlEmitter):
 	image_params_re = re.compile(r'^(?:(?P<size>[0-9]+x[0-9]+)(?:\||$))?(?P<title>.*)$')
 
+	def header_emit(self, node):
+		return u'<h%d>%s</h%d>\n' % (
+			node.level + 1, self.html_escape(node.content), node.level)
+
 	def image_emit(self, node):
 		target = node.content
 		text = self.get_text(node)
