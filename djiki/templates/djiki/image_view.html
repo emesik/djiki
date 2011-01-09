@@ -4,7 +4,7 @@
 <div class="page content grid_12">
 	<div class="content">
 		<h1>{{ image.name }}</h1>
-		<a href="{{ MEDIA_URL }}{{ image.last_revision.file }}"><img src="{% thumbnail image.last_revision.file 920x920 crop %}" alt="{{ image.name }}" /></a>
+		<a href="{{ MEDIA_URL }}{{ image.last_revision.file }}"><img src="{% thumbnail image.last_revision.file 920x920 crop as img %}{{ img }}" alt="{{ image.name }}" /></a>
 	</div>
 </div>
 {% endblock %}
