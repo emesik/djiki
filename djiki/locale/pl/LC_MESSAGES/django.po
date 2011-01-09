@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djiki\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-06 23:54+0100\n"
-"PO-Revision-Date: 2011-01-07 00:02+0100\n"
+"POT-Creation-Date: 2011-01-09 18:22+0100\n"
+"PO-Revision-Date: 2011-01-09 18:32+0100\n"
 "Last-Translator: Michał Sałaban <michal@salaban.info>\n"
 "Language-Team: Michał Sałaban <michal@salaban.info>\n"
 "Language: \n"
@@ -27,7 +27,7 @@ msgid "Somebody else has modified this image in the meantime. Please review thes
 msgstr "Podczas Twojej edycji ktoś dokonał zmian w tym obrazie. Sprawdź ostatnią wersję przed wysłaniem swojego pliku."
 
 #: forms.py:88
-#: models.py:59
+#: models.py:58
 msgid "Name"
 msgstr "Nazwa"
 
@@ -44,13 +44,13 @@ msgid "Created"
 msgstr "Utworzono"
 
 #: models.py:26
-#: templates/djiki/history.html:12
+#: templates/djiki/history.html:14
 #: templates/djiki/image_history.html:12
 msgid "Author"
 msgstr "Autor"
 
 #: models.py:27
-#: templates/djiki/history.html:13
+#: templates/djiki/history.html:15
 #: templates/djiki/image_history.html:14
 msgid "Description"
 msgstr "Opis"
@@ -59,17 +59,46 @@ msgstr "Opis"
 msgid "Title"
 msgstr "Tytuł"
 
-#: models.py:36
-msgid "Rendered content"
-msgstr ""
-
-#: models.py:47
+#: models.py:46
 msgid "Content"
 msgstr "Treść"
 
-#: models.py:67
+#: models.py:69
 msgid "File"
 msgstr "Plik"
+
+#: views.py:29
+#, python-format
+msgid "The version you are viewing is not the latest one, but represents an older revision of this page, which may have been significantly modified. If it is not what you intended to view, <a href=\"%(url)s\">proceed to the latest version</a>."
+msgstr "Wersja, którą oglądasz, nie jest najnowszą, lecz przedstawia historyczny obraz tej strony. Od tego czasu treść mogła zostać znacząco zmieniona. Jeśli chcesz obejrzeć aktualną treść, <a href=\"%(url)s\">przejdź do najnowszej wersji</a>."
+
+#: views.py:66
+msgid "The content you see on this page is shown only as a preview. <strong>No changes have been saved yet.</strong> Please review the modifications and use the <em>Save</em> button to store them permanently."
+msgstr "Treść przedstawiona na tej stronie ma formę podglądu. <strong>Twoje zmiany nie zostały jeszcze zapisane.</strong> Sprawdź poprawność swoich modyfikacji, a następnie użyj przycisku <em>Zapisz</em> by zachować je na stałe."
+
+#: views.py:115
+#, python-format
+msgid "Reverted to revision of %(time)s by %(user)s."
+msgstr "Cofnięto do wersji z %(time)s autorstwa %(user)s."
+
+#: views.py:118
+#, python-format
+msgid "Reverted to anonymous revision of %(time)s."
+msgstr "Cofnięto do anonimowej wersji z %(time)s."
+
+#: views.py:142
+#, python-format
+msgid "Undid revision of %(time)s by %(user)s."
+msgstr "Cofnięto zmiany z %(time)s autorstwa %(user)s."
+
+#: views.py:145
+#, python-format
+msgid "Undid anonymous revision of %(time)s."
+msgstr "Cofnięto anonimowe zmiany z %(time)s."
+
+#: views.py:157
+msgid "It was impossible to automatically undo the change you have selected. Perhaps the page has been modified too much in the meantime. Review the following content comparison, which represents the change you tried to undo, and apply the changes manually to the latest revision."
+msgstr "Nie dało się automatycznie wycofać wskazanej przez Ciebie zmiany. Najprawdopodobniej od momentu ich wprowadzenia treść strony uległa zbyt dużym modyfikacjom. Przejrzyj poniższe zestawienie, będące obrazem zmiany wskazanej przez Ciebie do usunięcia, a następnie nanieś poprawki ręcznie na najświeższej wersji strony."
 
 #: templates/djiki/base_image.html:3
 #: templates/djiki/base_image.html.py:6
@@ -99,24 +128,74 @@ msgstr "Strona"
 msgid "Edit page"
 msgstr "Edytuj stronę"
 
-#: templates/djiki/edit.html:14
+#: templates/djiki/diff.html:3
+msgid "Content comparison"
+msgstr "Porównanie treści"
+
+#: templates/djiki/diff.html:8
+#, python-format
+msgid ""
+"\n"
+"\t\tComparing content of the page between %(from_time)s and %(to_time)s."
+msgstr ""
+"\n"
+"\t\tPorównanie treści strony pomiędzy %(from_time)s a %(to_time)s."
+
+#: templates/djiki/edit.html:17
 #: templates/djiki/image_edit.html:13
 msgid "Save"
 msgstr "Zapisz"
+
+#: templates/djiki/edit.html:18
+msgid "Preview"
+msgstr "Podgląd"
 
 #: templates/djiki/history.html:3
 msgid "Page history"
 msgstr "Historia strony"
 
-#: templates/djiki/history.html:11
+#: templates/djiki/history.html:12
 #: templates/djiki/image_history.html:11
 msgid "Modification time"
 msgstr "Czas modyfikacji"
 
-#: templates/djiki/history.html:22
+#: templates/djiki/history.html:13
+msgid "Compare"
+msgstr "Porównaj"
+
+#: templates/djiki/history.html:16
+msgid "Operations"
+msgstr "Operacje"
+
+#: templates/djiki/history.html:23
+msgid "View"
+msgstr "Obejrzyj"
+
+#: templates/djiki/history.html:25
+#, python-format
+msgid "%(timesince)s ago"
+msgstr "%(timesince)s temu"
+
+#: templates/djiki/history.html:33
 #: templates/djiki/image_history.html:23
 msgid "anonymous"
 msgstr "anonim"
+
+#: templates/djiki/history.html:37
+msgid "Revert to this version by discarding all later modifications."
+msgstr "Przywróć tą wersję odrzucając wszystkie późniejsze zmiany."
+
+#: templates/djiki/history.html:37
+msgid "revert"
+msgstr "przywróć"
+
+#: templates/djiki/history.html:38
+msgid "Undo this revision."
+msgstr "Cofnij tą zmianę."
+
+#: templates/djiki/history.html:38
+msgid "undo"
+msgstr "cofnij"
 
 #: templates/djiki/image_edit.html:3
 #: templates/djiki/image_edit.html.py:7
