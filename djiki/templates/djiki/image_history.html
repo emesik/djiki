@@ -23,7 +23,7 @@
 						{% else %}<em>{% trans "anonymous" %}</em>{% endif %}
 					</td>
 					<td>
-						{% thumbnail revision.file 200x150 as thumb %}
+						{% thumbnail revision.file "200x150" as thumb %}
 						<a href="{{ MEDIA_URL }}{{ revision.file }}"><img src="{{ thumb.url }}" alt="" /></a>
 						{% endthumbnail %}
 					</td>

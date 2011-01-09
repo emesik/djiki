@@ -4,7 +4,7 @@
 <div class="page content grid_12">
 	<div class="content">
 		<h1>{{ image.name }}</h1>
-		{% thumbnail image.last_revision.file 920x920 as img %}
+		{% thumbnail image.last_revision.file "920x920" as img %}
 		<a href="{{ MEDIA_URL }}{{ image.last_revision.file }}"><img src="{{ img.url }}" alt="{{ image.name }}" /></a>
 		{% endthumbnail %}
 	</div>
