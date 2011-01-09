@@ -4,9 +4,9 @@
 {% block djiki_actions %}
 <ul>
 	<li><a href="{% url djiki-image-view image.name|urlize_title %}">{% trans "Image" %}</a></li>
-	<li><a href="{% url djiki-image-edit image.name|urlize_title %}">{% trans "Edit image" %}</a></li>
-	<li><a href="{% url djiki-image-history image.name|urlize_title %}">{% trans "History" %}</a></li>
-	<li><a href="{% url djiki-image-new %}">{% trans "Upload" %}</a></li>
+	<li><a href="{% url djiki-image-edit image.name|urlize_title %}" rel="nofollow">{% trans "Edit image" %}</a></li>
+	<li><a href="{% url djiki-image-history image.name|urlize_title %}" rel="nofollow">{% trans "History" %}</a></li>
+	<li><a href="{% url djiki-image-new %}" rel="nofollow">{% trans "Upload" %}</a></li>
 </ul>
 <div class="clear"></div>
 {% endblock %}

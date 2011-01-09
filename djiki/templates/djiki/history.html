@@ -34,8 +34,8 @@
 					</td>
 					<td>{{ revision.description }}</td>
 					<td>
-						<a href="{% url djiki-page-revert page.title|urlize_title revision.pk %}" title="{% trans "Revert to this version by discarding all later modifications." %}">[{% trans "revert" %}]</a>
-						<a href="{% url djiki-page-undo page.title|urlize_title revision.pk %}" title="{% trans "Undo this revision." %}">[{% trans "undo" %}]</a>
+						<a href="{% url djiki-page-revert page.title|urlize_title revision.pk %}" rel="nofollow" title="{% trans "Revert to this version by discarding all later modifications." %}">[{% trans "revert" %}]</a>
+						<a href="{% url djiki-page-undo page.title|urlize_title revision.pk %}" rel="nofollow" title="{% trans "Undo this revision." %}">[{% trans "undo" %}]</a>
 					</td>
 				</tr>
 				{% endfor %}
