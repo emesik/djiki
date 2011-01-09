@@ -1,17 +1,21 @@
 {% extends 'djiki/base_page.html' %}
-{% load i18n %}
+{% load i18n djiki_tags %}
 {% block title %}{% trans "Edit page" %}: {{ block.super }}{% endblock %}
 {% block djiki_main %}
 <div class="page edit grid_12">
 	<div class="content">
 		<h1>{{ page.title }}</h1>
+		{% if preview_content %}
+		{{ preview_content|djiki_markup }}
+		{% endif %}
 		<form action="" method="post">
 			<fieldset>
 				{% csrf_token %}
 				{{ form.as_p }}
 			</fieldset>
 			<div class="buttons">
-				<button type="submit">{% trans "Save" %}</button>
+				<button class="save" type="submit" name="action" value="save">{% trans "Save" %}</button>
+				<button class="preview" type="submit" name="action" value="preview">{% trans "Preview" %}</button>
 			</div>
 		</form>
 	</div>

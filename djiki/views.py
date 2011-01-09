@@ -54,12 +54,21 @@ def edit(request, title):
 	form = forms.PageEditForm(
 			data=request.POST or None, instance=revision, page=page,
 			initial={'content': last_content})
+	preview_content = None
 	if request.method == 'POST':
-		if form.is_valid():
+		is_preview = request.POST.get('action') == 'preview'
+		if form.is_valid() and not is_preview:
 			form.save()
 			return HttpResponseRedirect(
 					reverse('djiki-page-view', kwargs={'title': url_title}))
-	return direct_to_template(request, 'djiki/edit.html', {'form': form, 'page': page})
+		preview_content = form.cleaned_data.get('content', form.data['content'])
+		if is_preview:
+			messages.info(request, _("The content you see on this page is shown only as "
+					"a preview. <strong>No changes have been saved yet.</strong> Please "
+					"review the modifications and use the <em>Save</em> button to store "
+					"them permanently."))
+	return direct_to_template(request, 'djiki/edit.html',
+			{'form': form, 'page': page, 'preview_content': preview_content})
 
 def history(request, title):
 	url_title = utils.urlize_title(title)
