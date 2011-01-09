@@ -1,13 +1,16 @@
 {% load thumbnail %}
 <div class="image{% if size %} with_size{% endif %}">
 	{% if image %}
-	{% if size %}
-		{% thumbnail image.last_revision.file size crop as img %}
-	{% else %}
-		{% thumbnail image.last_revision.file 912x912 crop as img %}
-	{% endif %}
 	<a href="{% url djiki-image-view url_name %}">
-	<img src="{{ img }}" alt="{{ title }}" />
+	{% if size %}
+		{% thumbnail image.last_revision.file size as img %}
+		<img src="{{ img.url }}" alt="{{ title }}" />
+		{% endthumbnail %}
+	{% else %}
+		{% thumbnail image.last_revision.file "912x912" as img %}
+		<img src="{{ img.url }}" alt="{{ title }}" />
+		{% endthumbnail %}
+	{% endif %}
 	</a>
 	{% else %}
 	<img src="{{ url }}" alt="{{ title }}" />

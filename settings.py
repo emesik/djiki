@@ -6,7 +6,7 @@ import sys
 PROJECT_ROOT = os.path.dirname( __file__ )
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+THUMBNAIL_DEBUG = TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
 	# ('Your Name', 'your_email@domain.com'),
