@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -32,6 +33,8 @@ description3 = u"Added some text"
 
 class SimpleTest(TestCase):
 	def setUp(self):
+		settings.DJIKI_SPACES_AS_UNDERSCORES = False
+		settings.DJIKI_ALLOW_ANONYMOUS_EDITS = True
 		self.user1 = User.objects.create(username='foouser')
 		self.password1 = 'foopassword'
 		self.user1.set_password(self.password1)
@@ -70,6 +73,21 @@ class SimpleTest(TestCase):
 		self._page_edit(title, content2, description2)
 		self._page_edit(title, content3, description3)
 
+	def test_underscores(self):
+		title_raw  = u"Another test page, let's see..."
+		title_xlat = u"Another_test_page,_let's_see..."
+		self._page_edit(title_raw, "test content", "")
+		client = Client()
+		r = client.get(reverse('djiki-page-view', kwargs={'title': title_raw}))
+		self.assertEqual(200, r.status_code)
+		r = client.get(reverse('djiki-page-view', kwargs={'title': title_xlat}))
+		self.assertEqual(404, r.status_code)
+		settings.DJIKI_SPACES_AS_UNDERSCORES = True
+		r = client.get(reverse('djiki-page-view', kwargs={'title': title_raw}))
+		self.assertEqual(302, r.status_code)
+		r = client.get(reverse('djiki-page-view', kwargs={'title': title_xlat}))
+		self.assertEqual(200, r.status_code)
+
 	def test_edit_crash(self):
 		title = u"Crash page"
 		self._page_edit(title, content1, description1)
@@ -84,3 +102,23 @@ class SimpleTest(TestCase):
 			print r.content
 		self.assertEqual(r.status_code, 302)
 
+	def test_anonymous_edits(self):
+		title = u"Auth test page"
+		anon_client = Client()
+		user_client = Client()
+		user_client.login(username='foouser', password='foopassword')
+		settings.DJIKI_ALLOW_ANONYMOUS_EDITS = False
+		r = anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": ""})
+		self.assertEqual(r.status_code, 403)
+		r = user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": ""})
+		self.assertEqual(r.status_code, 302)
+		last_pk = models.Page.objects.get(title=title).last_revision().pk
+		settings.DJIKI_ALLOW_ANONYMOUS_EDITS = True
+		r = anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 302)
+		r = user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 302)

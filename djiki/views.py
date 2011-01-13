@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
+from django.template import RequestContext, loader
 from django.utils.translation import ugettext as _
 from django.views.generic.simple import direct_to_template
 from urllib import urlencode
@@ -20,7 +21,9 @@ def view(request, title, revision_pk=None):
 	try:
 		page = models.Page.objects.get(title=page_title)
 	except models.Page.DoesNotExist:
-		return direct_to_template(request, 'djiki/not_found.html', {'title': page_title})
+		t = loader.get_template('djiki/not_found.html')
+		c = RequestContext(request, {'title': page_title})
+		return HttpResponseNotFound(t.render(c))
 	if revision_pk:
 		try:
 			revision = page.revisions.get(pk=revision_pk)
@@ -57,16 +60,17 @@ def edit(request, title):
 	preview_content = None
 	if request.method == 'POST':
 		is_preview = request.POST.get('action') == 'preview'
-		if form.is_valid() and not is_preview:
-			form.save()
-			return HttpResponseRedirect(
-					reverse('djiki-page-view', kwargs={'title': url_title}))
-		preview_content = form.cleaned_data.get('content', form.data['content'])
-		if is_preview:
-			messages.info(request, _("The content you see on this page is shown only as "
-					"a preview. <strong>No changes have been saved yet.</strong> Please "
-					"review the modifications and use the <em>Save</em> button to store "
-					"them permanently."))
+		if form.is_valid():
+			if is_preview:
+				preview_content = form.cleaned_data.get('content', form.data['content'])
+				messages.info(request, _("The content you see on this page is shown only as "
+						"a preview. <strong>No changes have been saved yet.</strong> Please "
+						"review the modifications and use the <em>Save</em> button to store "
+						"them permanently."))
+			else:
+				form.save()
+				return HttpResponseRedirect(
+						reverse('djiki-page-view', kwargs={'title': url_title}))
 	return direct_to_template(request, 'djiki/edit.html',
 			{'form': form, 'page': page, 'preview_content': preview_content})
 
