@@ -1,5 +1,5 @@
 {% load thumbnail %}
-<div class="image{% if size %} with_size{% endif %}">
+<div class="image{% if size %} with_size{% endif %}{% if not image %} external{% endif %}">
 	{% if image %}
 	<a href="{% url djiki-image-view url_name %}">
 	{% if size %}

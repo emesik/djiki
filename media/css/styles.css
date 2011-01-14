@@ -106,7 +106,8 @@ fieldset {
 	padding: 3px;
 	float: left;
 }
-.djiki .page .content .image.with_size {
+.djiki .page .content .image.with_size,
+.djiki .page .content .image.external {
 	margin-right: 10px;
 }
 	.djiki .page .content .image .title {
