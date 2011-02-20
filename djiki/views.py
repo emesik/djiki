@@ -100,6 +100,8 @@ def diff(request, title):
 			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
 
 def revert(request, title, revision_pk):
+	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+		return HttpResponseForbidden()
 	url_title = utils.urlize_title(title)
 	if title != url_title:
 		return HttpResponseRedirect(
@@ -127,6 +129,8 @@ def revert(request, title, revision_pk):
 			{'page': page, 'form': form, 'src_revision': src_revision})
 
 def undo(request, title, revision_pk):
+	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+		return HttpResponseForbidden()
 	url_title = utils.urlize_title(title)
 	if title != url_title:
 		return HttpResponseRedirect(
