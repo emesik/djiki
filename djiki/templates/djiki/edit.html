@@ -9,15 +9,32 @@
 		{{ preview_content|djiki_markup }}
 		<div class="clear"></div>
 		{% endif %}
+	</div>
+	<div class="editForm">
 		<form action="" method="post">
+			{% csrf_token %}
 			<fieldset>
-				{% csrf_token %}
-				{{ form.as_p }}
+			{% for field in form %}
+				{% if not field.is_hidden %}
+				<div class="grid_1 alpha label">
+				{{ field.label_tag }}:
+				</div>
+				<div class="grid_11 omega field">
+				{% if field.errors %}{{ field.errors }}{% endif %}
+				{{ field }}
+				</div>
+				<div class="clear"></div>
+				{% else %}
+				{{ field }}
+				{% endif %}
+			{% endfor %}
 			</fieldset>
-			<div class="buttons">
+			<div class="grid_1 alpha">&nbsp;</div>
+			<div class="grid_11 omega buttons">
 				<button class="save" type="submit" name="action" value="save">{% trans "Save" %}</button>
 				<button class="preview" type="submit" name="action" value="preview">{% trans "Preview" %}</button>
 			</div>
+			<div class="clear"></div>
 		</form>
 	</div>
 </div>

@@ -52,6 +52,29 @@ fieldset {
 		.djiki .page .content {
 			margin: 10px;
 		}
+		.djiki .page .editForm fieldset {
+			margin: 0;
+			padding: 0;
+		}
+			.djiki .page .editForm fieldset .label {
+				text-align: right;
+			}
+				.djiki .page .editForm fieldset .label label {
+					font-weight: bold;
+				}
+			.djiki .page .editForm fieldset .field input,
+			.djiki .page .editForm fieldset .field textarea {
+				width: 840px;
+			}
+			.djiki .page .editForm fieldset .field textarea {
+				min-height: 360px;
+			}
+			.djiki .page .editForm .buttons {
+				padding: 10px 0;
+			}
+				.djiki .page .editForm .buttons button.save {
+					font-weight: bold;
+				}
 
 #messages ul {
 	list-style-type: none;
