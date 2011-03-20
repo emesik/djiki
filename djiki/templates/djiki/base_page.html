@@ -6,6 +6,7 @@
 	<li><a href="{% url djiki-page-view page.title|urlize_title %}">{% trans "Page" %}</a></li>
 	<li><a href="{% url djiki-page-edit page.title|urlize_title %}" rel="nofollow">{% trans "Edit page" %}</a></li>
 	<li><a href="{% url djiki-page-history page.title|urlize_title %}" rel="nofollow">{% trans "History" %}</a></li>
+	<li><a href="?raw=1" rel="nofollow">{% trans "Get source" %}</a></li>
 	<li><a href="{% url djiki-image-new %}" rel="nofollow">{% trans "Upload" %}</a></li>
 </ul>
 <div class="clear"></div>

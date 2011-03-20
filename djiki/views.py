@@ -2,7 +2,7 @@ from diff_match_patch import diff_match_patch
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, loader
 from django.utils.translation import ugettext as _
@@ -36,6 +36,11 @@ def view(request, title, revision_pk=None):
 					'url': reverse('djiki-page-view', kwargs={'title': url_title})})
 	else:
 		revision = page.last_revision()
+	if request.REQUEST.get('raw', ''):
+		response = HttpResponse(mimetype='text/plain')
+		response['Content-Disposition'] = 'attachment; filename=%s.txt' % title
+		response.write(revision.content)
+		return response
 	return direct_to_template(request, 'djiki/view.html',
 			{'page': page, 'revision': revision})
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djiki\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-09 18:22+0100\n"
-"PO-Revision-Date: 2011-01-09 18:32+0100\n"
+"POT-Creation-Date: 2011-03-20 04:24+0100\n"
+"PO-Revision-Date: 2011-03-20 04:24+0100\n"
 "Last-Translator: Michał Sałaban <michal@salaban.info>\n"
 "Language-Team: Michał Sałaban <michal@salaban.info>\n"
 "Language: \n"
@@ -67,36 +67,36 @@ msgstr "Treść"
 msgid "File"
 msgstr "Plik"
 
-#: views.py:29
+#: views.py:32
 #, python-format
 msgid "The version you are viewing is not the latest one, but represents an older revision of this page, which may have been significantly modified. If it is not what you intended to view, <a href=\"%(url)s\">proceed to the latest version</a>."
 msgstr "Wersja, którą oglądasz, nie jest najnowszą, lecz przedstawia historyczny obraz tej strony. Od tego czasu treść mogła zostać znacząco zmieniona. Jeśli chcesz obejrzeć aktualną treść, <a href=\"%(url)s\">przejdź do najnowszej wersji</a>."
 
-#: views.py:66
+#: views.py:71
 msgid "The content you see on this page is shown only as a preview. <strong>No changes have been saved yet.</strong> Please review the modifications and use the <em>Save</em> button to store them permanently."
 msgstr "Treść przedstawiona na tej stronie ma formę podglądu. <strong>Twoje zmiany nie zostały jeszcze zapisane.</strong> Sprawdź poprawność swoich modyfikacji, a następnie użyj przycisku <em>Zapisz</em> by zachować je na stałe."
 
-#: views.py:115
+#: views.py:126
 #, python-format
 msgid "Reverted to revision of %(time)s by %(user)s."
 msgstr "Cofnięto do wersji z %(time)s autorstwa %(user)s."
 
-#: views.py:118
+#: views.py:129
 #, python-format
 msgid "Reverted to anonymous revision of %(time)s."
 msgstr "Cofnięto do anonimowej wersji z %(time)s."
 
-#: views.py:142
+#: views.py:155
 #, python-format
 msgid "Undid revision of %(time)s by %(user)s."
 msgstr "Cofnięto zmiany z %(time)s autorstwa %(user)s."
 
-#: views.py:145
+#: views.py:158
 #, python-format
 msgid "Undid anonymous revision of %(time)s."
 msgstr "Cofnięto anonimowe zmiany z %(time)s."
 
-#: views.py:157
+#: views.py:170
 msgid "It was impossible to automatically undo the change you have selected. Perhaps the page has been modified too much in the meantime. Review the following content comparison, which represents the change you tried to undo, and apply the changes manually to the latest revision."
 msgstr "Nie dało się automatycznie wycofać wskazanej przez Ciebie zmiany. Najprawdopodobniej od momentu ich wprowadzenia treść strony uległa zbyt dużym modyfikacjom. Przejrzyj poniższe zestawienie, będące obrazem zmiany wskazanej przez Ciebie do usunięcia, a następnie nanieś poprawki ręcznie na najświeższej wersji strony."
 
@@ -115,7 +115,7 @@ msgid "History"
 msgstr "Historia"
 
 #: templates/djiki/base_image.html:9
-#: templates/djiki/base_page.html:9
+#: templates/djiki/base_page.html:10
 msgid "Upload"
 msgstr "Wyślij plik"
 
@@ -127,6 +127,10 @@ msgstr "Strona"
 #: templates/djiki/edit.html:3
 msgid "Edit page"
 msgstr "Edytuj stronę"
+
+#: templates/djiki/base_page.html:9
+msgid "Get source"
+msgstr "Pobierz źródło"
 
 #: templates/djiki/diff.html:3
 msgid "Content comparison"
@@ -141,12 +145,12 @@ msgstr ""
 "\n"
 "\t\tPorównanie treści strony pomiędzy %(from_time)s a %(to_time)s."
 
-#: templates/djiki/edit.html:17
+#: templates/djiki/edit.html:34
 #: templates/djiki/image_edit.html:13
 msgid "Save"
 msgstr "Zapisz"
 
-#: templates/djiki/edit.html:18
+#: templates/djiki/edit.html:35
 msgid "Preview"
 msgstr "Podgląd"
 
