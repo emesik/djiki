@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.template import RequestContext, loader
 from django.utils.translation import ugettext as _
 from django.views.generic.simple import direct_to_template
-from urllib import urlencode
+from urllib import urlencode, quote
 from . import models, forms, utils
 
 def view(request, title, revision_pk=None):
@@ -38,7 +38,7 @@ def view(request, title, revision_pk=None):
 		revision = page.last_revision()
 	if request.REQUEST.get('raw', ''):
 		response = HttpResponse(mimetype='text/plain')
-		response['Content-Disposition'] = 'attachment; filename=%s.txt' % title
+		response['Content-Disposition'] = 'attachment; filename=%s.txt' % quote(title.encode('utf-8'))
 		response.write(revision.content)
 		return response
 	return direct_to_template(request, 'djiki/view.html',
