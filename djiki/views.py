@@ -10,6 +10,10 @@ from django.views.generic.simple import direct_to_template
 from urllib import urlencode, quote
 from . import models, forms, utils
 
+
+def allow_anonymous_edits():
+        return getattr(settings, 'DJIKI_ALLOW_ANONYMOUS_EDITS', True)
+
 def view(request, title, revision_pk=None):
 	url_title = utils.urlize_title(title)
 	if title != url_title:
@@ -45,7 +49,7 @@ def view(request, title, revision_pk=None):
 			{'page': page, 'revision': revision})
 
 def edit(request, title):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	url_title = utils.urlize_title(title)
 	if title != url_title:
@@ -105,7 +109,7 @@ def diff(request, title):
 			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
 
 def revert(request, title, revision_pk):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	url_title = utils.urlize_title(title)
 	if title != url_title:
@@ -134,7 +138,7 @@ def revert(request, title, revision_pk):
 			{'page': page, 'form': form, 'src_revision': src_revision})
 
 def undo(request, title, revision_pk):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	url_title = utils.urlize_title(title)
 	if title != url_title:
@@ -183,7 +187,7 @@ def undo(request, title, revision_pk):
 	return direct_to_template(request, 'djiki/edit.html', {'page': page, 'form': form})
 
 def image_new(request):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	form = forms.NewImageUploadForm(data=request.POST or None, files=request.FILES or None)
 	if request.method == 'POST':
@@ -202,7 +206,7 @@ def image_view(request, name):
 	return direct_to_template(request, 'djiki/image_view.html', {'image': image})
 
 def image_edit(request, name):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	url_name = utils.urlize_title(name)
 	if name != url_name:
