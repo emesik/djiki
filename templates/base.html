@@ -30,7 +30,7 @@ Feel free to replace it with anything you like.
 		<div class="grid_12">
 			<ul>
 				{% for msg in messages %}
-				<li class="{{ msg.tags }}">{{ msg|safe }}</li>
+				<li class="{{ msg.tags }}">{{ msg }}</li>
 				{% endfor %}
 			</ul>
 		</div>
