@@ -34,11 +34,11 @@ def view(request, title, revision_pk=None):
 			revision = page.revisions.get(pk=revision_pk)
 		except models.PageRevision.DoesNotExist:
 			return HttpResponseNotFound()
-		messages.info(request, _("The version you are viewing is not the latest one, "
+		messages.info(request, mark_safe(_("The version you are viewing is not the latest one, "
 				"but represents an older revision of this page, which may have been "
 				"significantly modified. If it is not what you intended to view, "
 				"<a href=\"%(url)s\">proceed to the latest version</a>.") % {
-					'url': reverse('djiki-page-view', kwargs={'title': url_title})})
+					'url': reverse('djiki-page-view', kwargs={'title': url_title})}))
 	else:
 		revision = page.last_revision()
 	if request.REQUEST.get('raw', ''):
@@ -73,10 +73,10 @@ def edit(request, title):
 		if form.is_valid():
 			if is_preview:
 				preview_content = form.cleaned_data.get('content', form.data['content'])
-				messages.info(request, _("The content you see on this page is shown only as "
+				messages.info(request, mark_safe(_("The content you see on this page is shown only as "
 						"a preview. <strong>No changes have been saved yet.</strong> Please "
 						"review the modifications and use the <em>Save</em> button to store "
-						"them permanently."))
+						"them permanently.")))
 			else:
 				form.save()
 				return HttpResponseRedirect(
