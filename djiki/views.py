@@ -6,9 +6,14 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidde
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, loader
 from django.utils.translation import ugettext as _
+from django.utils.safestring import mark_safe
 from django.views.generic.simple import direct_to_template
 from urllib import urlencode, quote
 from . import models, forms, utils
+
+
+def allow_anonymous_edits():
+        return getattr(settings, 'DJIKI_ALLOW_ANONYMOUS_EDITS', True)
 
 def view(request, title, revision_pk=None):
 	url_title = utils.urlize_title(title)
@@ -29,11 +34,11 @@ def view(request, title, revision_pk=None):
 			revision = page.revisions.get(pk=revision_pk)
 		except models.PageRevision.DoesNotExist:
 			return HttpResponseNotFound()
-		messages.info(request, _("The version you are viewing is not the latest one, "
+		messages.info(request, mark_safe(_("The version you are viewing is not the latest one, "
 				"but represents an older revision of this page, which may have been "
 				"significantly modified. If it is not what you intended to view, "
 				"<a href=\"%(url)s\">proceed to the latest version</a>.") % {
-					'url': reverse('djiki-page-view', kwargs={'title': url_title})})
+					'url': reverse('djiki-page-view', kwargs={'title': url_title})}))
 	else:
 		revision = page.last_revision()
 	if request.REQUEST.get('raw', ''):
@@ -45,7 +50,7 @@ def view(request, title, revision_pk=None):
 			{'page': page, 'revision': revision})
 
 def edit(request, title):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	url_title = utils.urlize_title(title)
 	if title != url_title:
@@ -68,10 +73,10 @@ def edit(request, title):
 		if form.is_valid():
 			if is_preview:
 				preview_content = form.cleaned_data.get('content', form.data['content'])
-				messages.info(request, _("The content you see on this page is shown only as "
+				messages.info(request, mark_safe(_("The content you see on this page is shown only as "
 						"a preview. <strong>No changes have been saved yet.</strong> Please "
 						"review the modifications and use the <em>Save</em> button to store "
-						"them permanently."))
+						"them permanently.")))
 			else:
 				form.save()
 				return HttpResponseRedirect(
@@ -105,7 +110,7 @@ def diff(request, title):
 			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
 
 def revert(request, title, revision_pk):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	url_title = utils.urlize_title(title)
 	if title != url_title:
@@ -134,7 +139,7 @@ def revert(request, title, revision_pk):
 			{'page': page, 'form': form, 'src_revision': src_revision})
 
 def undo(request, title, revision_pk):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	url_title = utils.urlize_title(title)
 	if title != url_title:
@@ -183,7 +188,7 @@ def undo(request, title, revision_pk):
 	return direct_to_template(request, 'djiki/edit.html', {'page': page, 'form': form})
 
 def image_new(request):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	form = forms.NewImageUploadForm(data=request.POST or None, files=request.FILES or None)
 	if request.method == 'POST':
@@ -202,7 +207,7 @@ def image_view(request, name):
 	return direct_to_template(request, 'djiki/image_view.html', {'image': image})
 
 def image_edit(request, name):
-	if not settings.DJIKI_ALLOW_ANONYMOUS_EDITS and not request.user.is_authenticated():
+	if not allow_anonymous_edits() and not request.user.is_authenticated():
 		return HttpResponseForbidden()
 	url_name = utils.urlize_title(name)
 	if name != url_name:
