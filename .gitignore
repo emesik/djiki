@@ -6,3 +6,6 @@
 media/djimages
 media/cache
 local_settings.py
+build
+dist
+djiki.egg-info
