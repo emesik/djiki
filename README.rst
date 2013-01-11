@@ -68,11 +68,12 @@ to use Creole. The default behavior, however, is to pass all the page
 contents through ``djiki.parsers.wikicreole`` module. The other choices are:
 
 * ``djiki.parsers.raw`` — passes the content without modification, allowing
-for raw HTML. This should not be used in a public wiki, as users may enter
-malicious code.
+  for raw HTML. This should not be used in a public wiki, as users may
+  enter malicious code.
+
 * ``djiki.parsers.html.SafeHTML`` — it is a safer alternative, which
-filters the resulting content from dangerous HTML elements like scripts,
-CSS styles or annoying and invalid tags.
+  filters the resulting content from dangerous HTML elements like scripts,
+  CSS styles or annoying and invalid tags.
 
 Images
 ------
