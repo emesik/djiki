@@ -45,7 +45,8 @@ Settings
 
 The following settings configure Djiki's behavior:
 
-``DJIKI_IMAGES_PATH`` — path to images, relative to MEDIA_ROOT.
+``DJIKI_PARSER`` — a Python path to the markup parser. The default is
+``djiki.parsers.wikicreole``.
 
 ``DJIKI_ALLOW_ANONYMOUS_EDITS`` — whether unauthorized users are
 able to edit pages. Defaults to True.
@@ -56,6 +57,22 @@ Depending on the settings, the adresses may look as
 ``http://djiki.org/wiki/Main_Page`` or ``http://djiki.org/wiki/Main%20Page``
 This setting will also squash multiple spaces into one. It affects image
 names in the same way, too. Defaults to True.
+
+``DJIKI_IMAGES_PATH`` — path to images, relative to MEDIA_ROOT.
+
+Parsers
+-------
+
+Djiki allows you to use custom markup parser and it is no longer required
+to use Creole. The default behavior, however, is to pass all the page
+contents through ``djiki.parsers.wikicreole`` module. The other choices are:
+
+* ``djiki.parsers.raw`` — passes the content without modification, allowing
+for raw HTML. This should not be used in a public wiki, as users may enter
+malicious code.
+* ``djiki.parsers.html.SafeHTML`` — it is a safer alternative, which
+filters the resulting content from dangerous HTML elements like scripts,
+CSS styles or annoying and invalid tags.
 
 Images
 ------
