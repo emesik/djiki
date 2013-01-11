@@ -1,13 +1,13 @@
 from diff_match_patch import diff_match_patch
 from django import template
 from django.utils.safestring import mark_safe
-from .. import parser, utils
+from .. import utils
 
 register = template.Library()
 
 @register.filter
 def djiki_markup(txt):
-	return mark_safe(parser.render(txt))
+	return mark_safe(utils.get_parser().render(txt))
 
 @register.filter
 def html_diff(diff):

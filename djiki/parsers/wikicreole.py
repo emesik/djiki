@@ -4,7 +4,7 @@ from creole.html_emitter import HtmlEmitter
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 
-from . import models, utils
+from .. import models, utils
 
 class DjikiHtmlEmitter(HtmlEmitter):
 	image_params_re = re.compile(r'^(?:(?P<size>[0-9]+x[0-9]+)(?:\||$))?(?P<title>.*)$')

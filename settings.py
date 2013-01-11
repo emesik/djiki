@@ -112,6 +112,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	'ga_processor.google_analytics',
 )
 
+DJIKI_PARSER = 'djiki.parsers.html.SafeHTML'
+
 DJIKI_IMAGES_PATH = 'djimages/'		# relative to MEDIA_ROOT
 DJIKI_ALLOW_ANONYMOUS_EDITS = True
 
