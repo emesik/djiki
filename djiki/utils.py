@@ -1,17 +1,26 @@
-import importlib, re
+import re
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.importlib import import_module
 
 def get_parser():
-	# FIXME: Django should have a function to do it better
-	ppath = getattr(settings, 'DJIKI_PARSER', 'djiki.parsers.wikicreole')
-	try:
-		parser = importlib.import_module(ppath)
-	except ImportError:
-		mpath, cname = ppath.rsplit('.', 1)
-		module = importlib.import_module(mpath)
-		klass = getattr(module, cname)
-		parser = klass()
-	return parser
+	setting = getattr(settings, 'DJIKI_PARSER', 'djiki.parsers.wikicreole')
+	if isinstance(setting, basestring):
+		try:
+			parser = import_module(setting)
+		except ImportError:
+			try:
+				mpath, cname = setting.rsplit('.', 1)
+			except ValueError:
+				raise ImproperlyConfigured('Invalid DJIKI_PARSER: "%s" does not '
+						'describe a module, object or class' % setting)
+			module = import_module(mpath)
+			klass = getattr(module, cname)
+			parser = klass()
+		return parser
+	if isinstance(setting, type):
+		return setting()
+	return setting
 
 def spaces_as_underscores():
 	return getattr(settings, 'DJIKI_SPACES_AS_UNDERSCORES', True)
