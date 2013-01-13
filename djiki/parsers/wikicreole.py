@@ -29,6 +29,11 @@ class DjikiHtmlEmitter(HtmlEmitter):
 					self.attr_escape(target), inside)
 			elif m.group('inter_wiki'):
 				raise NotImplementedError
+		if '/' in target:
+			# We do not allow slashes in page names, as they break our URLs and
+			# would cause a crash in reverse() call.
+			# FIXME: The node should be passed verbatim.
+			return u'[[%s|%s]]' % (node.content, inside)
 		return u'<a href="%s">%s</a>' % (
 			reverse('djiki-page-view', kwargs={'title': utils.urlize_title(self.attr_escape(target))}),
 			inside)
