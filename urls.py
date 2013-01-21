@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.conf.urls.defaults import *
+from django.views.generic import RedirectView
 
 urlpatterns = patterns('',
-	(r'^$', 'django.views.generic.simple.redirect_to', {'url': u'/wiki/Main_Page'}),
+	(r'^$', RedirectView.as_view(url=u'/wiki/Main_Page')),
 	(r'^wiki/', include('djiki.urls')),
 )
 

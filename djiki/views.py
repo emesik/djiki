@@ -5,9 +5,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, loader
+from django.template.response import TemplateResponse
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
-from django.views.generic.simple import direct_to_template
 from urllib import urlencode, quote
 from . import models, forms, utils
 
@@ -46,7 +46,7 @@ def view(request, title, revision_pk=None):
 		response['Content-Disposition'] = 'attachment; filename=%s.txt' % quote(title.encode('utf-8'))
 		response.write(revision.content)
 		return response
-	return direct_to_template(request, 'djiki/view.html',
+	return TemplateResponse(request, 'djiki/view.html',
 			{'page': page, 'revision': revision})
 
 def edit(request, title):
@@ -81,7 +81,7 @@ def edit(request, title):
 				form.save()
 				return HttpResponseRedirect(
 						reverse('djiki-page-view', kwargs={'title': url_title}))
-	return direct_to_template(request, 'djiki/edit.html',
+	return TemplateResponse(request, 'djiki/edit.html',
 			{'form': form, 'page': page, 'preview_content': preview_content})
 
 def history(request, title):
@@ -91,7 +91,7 @@ def history(request, title):
 	page_title = utils.deurlize_title(title)
 	page = get_object_or_404(models.Page, title=page_title)
 	history = page.revisions.order_by('-created')
-	return direct_to_template(request, 'djiki/history.html', {'page': page, 'history': history})
+	return TemplateResponse(request, 'djiki/history.html', {'page': page, 'history': history})
 
 def diff(request, title):
 	url_title = utils.urlize_title(title)
@@ -106,7 +106,7 @@ def diff(request, title):
 		return HttpResponseNotFound()
 	dmp = diff_match_patch()
 	diff = dmp.diff_compute(from_rev.content, to_rev.content, True, 2)
-	return direct_to_template(request, 'djiki/diff.html',
+	return TemplateResponse(request, 'djiki/diff.html',
 			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
 
 def revert(request, title, revision_pk):
@@ -135,7 +135,7 @@ def revert(request, title, revision_pk):
 					{'time': src_revision.created}
 		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page,
 				initial={'content': src_revision.content, 'description': description})
-	return direct_to_template(request, 'djiki/edit.html',
+	return TemplateResponse(request, 'djiki/edit.html',
 			{'page': page, 'form': form, 'src_revision': src_revision})
 
 def undo(request, title, revision_pk):
@@ -185,7 +185,7 @@ def undo(request, title, revision_pk):
 					urlencode(urldata)))
 		form = forms.PageEditForm(data=request.POST or None, page=page,
 				initial={'content': content, 'description': description})
-	return direct_to_template(request, 'djiki/edit.html', {'page': page, 'form': form})
+	return TemplateResponse(request, 'djiki/edit.html', {'page': page, 'form': form})
 
 def image_new(request):
 	if not allow_anonymous_edits() and not request.user.is_authenticated():
@@ -196,7 +196,7 @@ def image_new(request):
 			form.save()
 			return HttpResponseRedirect(
 					reverse('djiki-image-view', kwargs={'name': form.instance.image.name}))
-	return direct_to_template(request, 'djiki/image_edit.html', {'form': form})
+	return TemplateResponse(request, 'djiki/image_edit.html', {'form': form})
 
 def image_view(request, name):
 	url_name = utils.urlize_title(name)
@@ -204,7 +204,7 @@ def image_view(request, name):
 		return HttpResponseRedirect(reverse('djiki-image-view', kwargs={'name': url_name}))
 	image_name = utils.deurlize_title(name)
 	image = get_object_or_404(models.Image, name=image_name)
-	return direct_to_template(request, 'djiki/image_view.html', {'image': image})
+	return TemplateResponse(request, 'djiki/image_view.html', {'image': image})
 
 def image_edit(request, name):
 	if not allow_anonymous_edits() and not request.user.is_authenticated():
@@ -223,7 +223,7 @@ def image_edit(request, name):
 			form.save()
 			return HttpResponseRedirect(
 					reverse('djiki-image-view', kwargs={'name': url_name}))
-	return direct_to_template(request, 'djiki/image_edit.html', {'form': form})
+	return TemplateResponse(request, 'djiki/image_edit.html', {'form': form})
 
 def image_history(request, name):
 	url_name = utils.urlize_title(name)
@@ -232,4 +232,4 @@ def image_history(request, name):
 	image_name = utils.deurlize_title(name)
 	image = get_object_or_404(models.Image, name=image_name)
 	history = image.revisions.order_by('-created')
-	return direct_to_template(request, 'djiki/image_history.html', {'image': image, 'history': history})
+	return TemplateResponse(request, 'djiki/image_history.html', {'image': image, 'history': history})
