@@ -1,0 +1,49 @@
+"""The most basic authorization backends for Djiki.
+
+Each class must implement the following methods:
+	``can_view``, ``can_create``, ``can_edit``,
+	``can_view_history``, ``can_undo_revision``,
+	``can_revert_to``
+
+These methods must accept the following arguments:
+	``request`` - the current HTTP request
+	``target`` - the target object (page or image)
+	``revision`` - (for revision-scope methods) the revision being undone or reverted to
+
+The methods must return a ``bool`` value.
+"""
+
+class UnrestrictedAccess(object):
+	"Everyone is permitted to do anything."
+	def can_view(self, request, target):
+		return True
+
+	def can_create(self, request, target):
+		return True
+
+	def can_edit(self, request, target):
+		return True
+
+	def can_view_history(self, request, target):
+		return True
+
+	def can_undo_revision(self, request, target, revision):
+		return True
+
+	def can_revert_to(self, request, target, revision):
+		return True
+
+
+class OnlyAuthenticatedEdits(UnrestrictedAccess):
+	"Only authenticated users can modify the contents."
+	def can_create(self, request, target):
+		return request.user.is_authenticated()
+
+	def can_edit(self, request, target):
+		return request.user.is_authenticated()
+
+	def can_undo_revision(self, request, target):
+		return request.user.is_authenticated()
+
+	def can_revert_to(self, request, target):
+		return request.user.is_authenticated()

@@ -116,6 +116,7 @@ DJIKI_PARSER = 'djiki.parsers.wikicreole'
 
 DJIKI_IMAGES_PATH = 'djimages/'		# relative to MEDIA_ROOT
 DJIKI_ALLOW_ANONYMOUS_EDITS = True
+DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.OnlyAuthenticatedEdits'
 
 # The following switch will make all whitespaces appear as underscores
 # in URLs. If you want to have nice URLs, leave it enabled. If you wish
