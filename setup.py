@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
 	name = 'djiki',
-	version = '0.2',
+	version = '0.3',
 	description = 'Django Wiki Application',
 	url = 'https://github.com/emesik/djiki/',
 	long_description = open('README.rst').read(),
