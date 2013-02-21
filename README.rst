@@ -48,8 +48,12 @@ The following settings configure Djiki's behavior:
 ``DJIKI_PARSER`` — a Python path to the markup parser. The default is
 ``djiki.parsers.wikicreole``.
 
-``DJIKI_ALLOW_ANONYMOUS_EDITS`` — whether unauthorized users are
-able to edit pages. Defaults to True.
+``DJIKI_ALLOW_ANONYMOUS_EDITS`` — no longer used, replaced by:
+
+``DJIKI_AUTHORIZATION_BACKEND`` — a Python path to authorization backend.
+The default is ``djiki.auth.base.UnrestrictedAccess``, which grants full
+read/write permissions to all clients. The other included backends are
+``djiki.auth.base.OnlyAuthenticatedEdits`` and ``djiki.auth.base.OnlyAdminEdits``.
 
 ``DJIKI_SPACES_AS_UNDERSCORES`` — makes Djiki replace whitespaces in
 URLs by underscores. It's a choice between having nice or exact URLs.
@@ -87,7 +91,6 @@ still valid, however you may add size by typing
 Roadmap
 -------
 
-* ACLs: block anonymous edits, limit access to groups
 * more markup backends; MediaWiki is the main priority
 * page operations: rename, delete
 * translations
