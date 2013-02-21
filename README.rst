@@ -93,4 +93,5 @@ Roadmap
 
 * more markup backends; MediaWiki is the main priority
 * page operations: rename, delete
+* multi-language support, interwiki links
 * translations
