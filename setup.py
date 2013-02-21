@@ -2,9 +2,11 @@
 from distutils.core import setup
 from setuptools import find_packages
 
+version = __import__('djiki').__version__
+
 setup(
 	name = 'djiki',
-	version = '0.3',
+	version = version,
 	description = 'Django Wiki Application',
 	url = 'https://github.com/emesik/djiki/',
 	long_description = open('README.rst').read(),
