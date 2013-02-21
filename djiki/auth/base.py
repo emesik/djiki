@@ -27,12 +27,6 @@ class UnrestrictedAccess(object):
 	def can_view_history(self, request, target):
 		return True
 
-	def can_undo_revision(self, request, target, revision):
-		return True
-
-	def can_revert_to(self, request, target, revision):
-		return True
-
 
 class OnlyAuthenticatedEdits(UnrestrictedAccess):
 	"Only authenticated users can modify the contents."
@@ -42,8 +36,11 @@ class OnlyAuthenticatedEdits(UnrestrictedAccess):
 	def can_edit(self, request, target):
 		return request.user.is_authenticated()
 
-	def can_undo_revision(self, request, target):
-		return request.user.is_authenticated()
 
-	def can_revert_to(self, request, target):
-		return request.user.is_authenticated()
+class OnlyAdminEdits(UnrestrictedAccess):
+	"Only admin users can modify the contents."
+	def can_create(self, request, target):
+		return request.user.is_authenticated() and request.user.is_superuser
+
+	def can_edit(self, request, target):
+		return request.user.is_authenticated() and request.user.is_superuser

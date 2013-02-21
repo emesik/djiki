@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 from . import models
+from .auth.base import UnrestrictedAccess
 
 content1 = u"""
 = Hello world! =
@@ -34,11 +35,20 @@ description3 = u"Added some text"
 class SimpleTest(TestCase):
 	def setUp(self):
 		settings.DJIKI_SPACES_AS_UNDERSCORES = False
-		settings.DJIKI_ALLOW_ANONYMOUS_EDITS = True
-		self.user1 = User.objects.create(username='foouser')
-		self.password1 = 'foopassword'
-		self.user1.set_password(self.password1)
-		self.user1.save()
+		settings.DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.UnrestrictedAccess'
+		self.user = User.objects.create(username='foouser')
+		user_password = 'foopassword'
+		self.user.set_password(user_password)
+		self.user.save()
+		self.admin = User.objects.create(username='admin', is_superuser=True)
+		admin_password = 'adminpassword'
+		self.admin.set_password(admin_password)
+		self.admin.save()
+		self.anon_client = Client()
+		self.user_client = Client()
+		self.admin_client = Client()
+		self.user_client.login(username='foouser', password=user_password)
+		self.admin_client.login(username='admin', password=admin_password)
 
 	def _page_edit(self, title, content, description='', username=None, password=None):
 		client = Client()
@@ -62,10 +72,6 @@ class SimpleTest(TestCase):
 		else:
 			self.assertEqual(p.last_revision().author, None)
 		self.assertEqual(p.last_revision().description, description)
-
-	def test_new_page_creation(self):
-		self._page_edit(u"User Page", content1, description1, self.user1.username, self.password1)
-		self._page_edit(u"Anonymous Page", content2, description2)
 
 	def test_subsequent_edits(self):
 		title = u"Test page"
@@ -102,23 +108,92 @@ class SimpleTest(TestCase):
 			print r.content
 		self.assertEqual(r.status_code, 302)
 
-	def test_anonymous_edits(self):
+	def test_edits(self):
 		title = u"Auth test page"
-		anon_client = Client()
-		user_client = Client()
-		user_client.login(username='foouser', password='foopassword')
-		settings.DJIKI_ALLOW_ANONYMOUS_EDITS = False
-		r = anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+		settings.DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.UnrestrictedAccess'
+		# anonymous create
+		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": ""})
+		self.assertEqual(r.status_code, 302)
+		# anonymous edit
+		last_pk = models.Page.objects.get(title=title).last_revision().pk
+		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 302)
+		# authenticated edit
+		last_pk = models.Page.objects.get(title=title).last_revision().pk
+		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 302)
+		# admin edit
+		last_pk = models.Page.objects.get(title=title).last_revision().pk
+		r = self.admin_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 302)
+
+		settings.DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.OnlyAuthenticatedEdits'
+		# anonymous create
+		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 1'}),
 				{'content': "blah", "description": ""})
 		self.assertEqual(r.status_code, 403)
-		r = user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+		# anonymous edit
+		last_pk = models.Page.objects.get(title=title).last_revision().pk
+		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 403)
+		# authenticated create
+		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 2'}),
 				{'content': "blah", "description": ""})
 		self.assertEqual(r.status_code, 302)
+		# authenticated edit
+		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 302)
+		# admin edit
 		last_pk = models.Page.objects.get(title=title).last_revision().pk
-		settings.DJIKI_ALLOW_ANONYMOUS_EDITS = True
-		r = anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+		r = self.admin_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
 				{'content': "blah", "description": "", 'prev_revision': last_pk})
 		self.assertEqual(r.status_code, 302)
-		r = user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+
+		settings.DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.OnlyAdminEdits'
+		# anonymous create
+		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 3'}),
+				{'content': "blah", "description": ""})
+		self.assertEqual(r.status_code, 403)
+		# anonymous edit
+		last_pk = models.Page.objects.get(title=title).last_revision().pk
+		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 403)
+		# authenticated create
+		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 4'}),
+				{'content': "blah", "description": ""})
+		self.assertEqual(r.status_code, 403)
+		# authenticated edit
+		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': "blah", "description": "", 'prev_revision': last_pk})
+		self.assertEqual(r.status_code, 403)
+		# admin create
+		r = self.admin_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 5'}),
+				{'content': "blah", "description": ""})
+		self.assertEqual(r.status_code, 302)
+		# admin edit
+		r = self.admin_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
 				{'content': "blah", "description": "", 'prev_revision': last_pk})
 		self.assertEqual(r.status_code, 302)
+
+	def test_history_view(self):
+		title = u"History page"
+		self._page_edit(title, "foo bar", "baz")
+
+		settings.DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.UnrestrictedAccess'
+		r = self.anon_client.get(reverse('djiki-page-history', kwargs={'title': title}))
+		self.assertEqual(r.status_code, 200)
+
+		class NoHistoryView(UnrestrictedAccess):
+			def can_view_history(self, request, target):
+				return False
+
+		settings.DJIKI_AUTHORIZATION_BACKEND = NoHistoryView
+		r = self.anon_client.get(reverse('djiki-page-history', kwargs={'title': title}))
+		self.assertEqual(r.status_code, 403)
