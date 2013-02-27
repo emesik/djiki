@@ -5,6 +5,7 @@ from django.views.generic import RedirectView
 urlpatterns = patterns('',
 	(r'^$', RedirectView.as_view(url=u'/wiki/Main_Page')),
 	(r'^wiki/', include('djiki.urls')),
+	(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
 )
 
 if settings.DEBUG:
