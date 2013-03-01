@@ -1,6 +1,6 @@
 from diff_match_patch import diff_match_patch
-from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
@@ -27,10 +27,10 @@ def view(request, title, revision_pk=None):
 		c = RequestContext(request, {'title': page_title})
 		return HttpResponseNotFound(t.render(c))
 	if not auth.can_view(request, page):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	if revision_pk:
 		if not auth.can_view_history(request, page):
-			return HttpResponseForbidden()
+			raise PermissionDenied
 		try:
 			revision = page.revisions.get(pk=revision_pk)
 		except models.PageRevision.DoesNotExist:
@@ -60,12 +60,12 @@ def edit(request, title):
 		page = models.Page.objects.get(title=page_title)
 		last_content = page.last_revision().content
 		if not auth.can_edit(request, page):
-			return HttpResponseForbidden()
+			raise PermissionDenied
 	except models.Page.DoesNotExist:
 		page = models.Page(title=page_title)
 		last_content = ''
 		if not auth.can_create(request, page):
-			return HttpResponseForbidden()
+			raise PermissionDenied
 	revision = models.PageRevision(page=page,
 			author=request.user if request.user.is_authenticated() else None)
 	form = forms.PageEditForm(
@@ -96,7 +96,7 @@ def history(request, title):
 	page = get_object_or_404(models.Page, title=page_title)
 	auth = utils.get_auth_backend()
 	if not auth.can_view_history(request, page):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	history = page.revisions.order_by('-created')
 	return TemplateResponse(request, 'djiki/history.html', {'page': page, 'history': history})
 
@@ -109,7 +109,7 @@ def diff(request, title):
 	page = get_object_or_404(models.Page, title=page_title)
 	auth = utils.get_auth_backend()
 	if not auth.can_view_history(request, page):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	try:
 		from_rev = page.revisions.get(pk=request.REQUEST['from_revision_pk'])
 		to_rev = page.revisions.get(pk=request.REQUEST['to_revision_pk'])
@@ -122,7 +122,7 @@ def diff(request, title):
 
 def revert(request, title, revision_pk):
 	if not allow_anonymous_edits() and not request.user.is_authenticated():
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	url_title = utils.urlize_title(title)
 	if title != url_title:
 		return HttpResponseRedirect(
@@ -131,7 +131,7 @@ def revert(request, title, revision_pk):
 	page = get_object_or_404(models.Page, title=page_title)
 	auth = utils.get_auth_backend()
 	if not auth.can_edit(request, page):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	src_revision = get_object_or_404(models.PageRevision, page=page, pk=revision_pk)
 	new_revision = models.PageRevision(page=page,
 			author=request.user if request.user.is_authenticated() else None)
@@ -161,7 +161,7 @@ def undo(request, title, revision_pk):
 	page = get_object_or_404(models.Page, title=page_title)
 	auth = utils.get_auth_backend()
 	if not auth.can_edit(request, page):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	src_revision = get_object_or_404(models.PageRevision, page=page, pk=revision_pk)
 	new_revision = models.PageRevision(page=page,
 			author=request.user if request.user.is_authenticated() else None)
@@ -205,7 +205,7 @@ def undo(request, title, revision_pk):
 def image_new(request):
 	auth = utils.get_auth_backend()
 	if not auth.can_create(request, models.Image()):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	form = forms.NewImageUploadForm(data=request.POST or None, files=request.FILES or None)
 	if request.method == 'POST':
 		if form.is_valid():
@@ -222,7 +222,7 @@ def image_view(request, name):
 	image = get_object_or_404(models.Image, name=image_name)
 	auth = utils.get_auth_backend()
 	if not auth.can_view(request, image):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	return TemplateResponse(request, 'djiki/image_view.html', {'image': image})
 
 def image_edit(request, name):
@@ -233,7 +233,7 @@ def image_edit(request, name):
 	image = get_object_or_404(models.Image, name=image_name)
 	auth = utils.get_auth_backend()
 	if not auth.can_edit(request, image):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	revision = models.ImageRevision(image=image,
 			author=request.user if request.user.is_authenticated() else None)
 	form = forms.ImageUploadForm(data=request.POST or None, files=request.FILES or None,
@@ -253,6 +253,6 @@ def image_history(request, name):
 	image = get_object_or_404(models.Image, name=image_name)
 	auth = utils.get_auth_backend()
 	if not auth.can_view_history(request, image):
-		return HttpResponseForbidden()
+		raise PermissionDenied
 	history = image.revisions.order_by('-created')
 	return TemplateResponse(request, 'djiki/image_history.html', {'image': image, 'history': history})
