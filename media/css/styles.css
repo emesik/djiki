@@ -100,15 +100,16 @@ fieldset {
 }
 
 /* styles for history screen */
-.djiki .page.history .content table {
+.djiki .page.history .content table, .djiki .latest .content table {
 	border-collapse: collapse;
 }
-	.djiki .page.history .content table tr {
+	.djiki .page.history .content table th,
+	.djiki .page.history .content table td,
+	.djiki .latest .content table th,
+	.djiki .latest .content table td {
+		padding: 1px 10px;
+		border: 1px solid #eee;
 	}
-		.djiki .page.history .content table th, .djiki .page.history .content table td {
-			padding: 1px 10px;
-			border: 1px solid #eee;
-		}
 
 .djiki .page.diff .content .diff {
 	padding: 10px 20px;
@@ -138,3 +139,7 @@ fieldset {
 		padding: 0;
 		font-size: 80%;
 	}
+#footer {
+	padding-top: 1em;
+	font-size: 75%;
+}

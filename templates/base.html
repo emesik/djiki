@@ -38,6 +38,11 @@ Feel free to replace it with anything you like.
 	{% endif %}
 	{% endblock %}
 {% block page %}{% endblock %}
+	<div id="footer" class="container_12">
+		<div class="prefix_5 grid_2">
+			[<a href="{% url 'latest-changes' %}">latest changes</a>]
+		</div>
+	</div>
 {% block google-analytics %}
 {% if GOOGLE_ANALYTICS_ID %}
 <script type="text/javascript">
