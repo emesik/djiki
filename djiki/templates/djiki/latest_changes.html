@@ -24,7 +24,7 @@
 						{% blocktrans with page.latest_change|timesince as timesince %}{{ timesince }} ago{% endblocktrans %}
 					</td>
 					<td>
-						{% if revision.author %}{{ page.last_revision.author }}
+						{% if page.last_author %}{{ page.last_author }}
 						{% else %}<em>{% trans "anonymous" %}</em>{% endif %}
 					</td>
 					<td>{{ page.last_revision.description }}</td>
