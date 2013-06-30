@@ -7,7 +7,7 @@ register = template.Library()
 
 @register.filter
 def djiki_markup(txt):
-	return mark_safe(utils.get_parser().render(txt))
+	return mark_safe(utils.get_parser().render(txt).decode('utf-8'))
 
 @register.filter
 def html_diff(diff):
