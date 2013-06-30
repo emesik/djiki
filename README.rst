@@ -1,6 +1,8 @@
 Djiki
 =====
-Djiki is a lightweight, portable Wiki engine based on Django.
+Djiki is a lightweight, portable Wiki engine based on Django. It offers full functionality
+of a wiki engine without any configuration, yet it might be easily customized to match
+your preferred environment.
 
 Features:
 
@@ -11,6 +13,7 @@ Features:
 * diff views between revisions,
 * reverts to any revision in the history,
 * automatic undos of any historical revision, if possible.
+* not strictly bound to Django user model and template engine, you may replace them
 
 Requirements
 ------------
@@ -19,11 +22,13 @@ Requirements
 
 * WikiCreole parser in Python:
   http://oink.sheep.art.pl/WikiCreole%20parser%20in%20python
+  *It is used in the example implementation, but not required by Djiki itself.
+  You are free use any other markup or no markup at all.*
 
 * sorl-thumbnail:
+  https://github.com/sorl/sorl-thumbnail
   *It is used in the example templates, but you may run djiki
   with any other thumbnailing module or without one at all.*
-  https://github.com/sorl/sorl-thumbnail
 
 Usage
 -----
@@ -48,12 +53,7 @@ The following settings configure Djiki's behavior:
 ``DJIKI_PARSER`` — a Python path to the markup parser. The default is
 ``djiki.parsers.wikicreole``.
 
-``DJIKI_ALLOW_ANONYMOUS_EDITS`` — no longer used, replaced by:
-
-``DJIKI_AUTHORIZATION_BACKEND`` — a Python path to authorization backend.
-The default is ``djiki.auth.base.UnrestrictedAccess``, which grants full
-read/write permissions to all clients. The other included backends are
-``djiki.auth.base.OnlyAuthenticatedEdits`` and ``djiki.auth.base.OnlyAdminEdits``.
+``DJIKI_IMAGES_PATH`` — path to images, relative to MEDIA_ROOT.
 
 ``DJIKI_SPACES_AS_UNDERSCORES`` — makes Djiki replace whitespaces in
 URLs by underscores. It's a choice between having nice or exact URLs.
@@ -62,7 +62,16 @@ Depending on the settings, the adresses may look as
 This setting will also squash multiple spaces into one. It affects image
 names in the same way, too. Defaults to True.
 
-``DJIKI_IMAGES_PATH`` — path to images, relative to MEDIA_ROOT.
+``DJIKI_AUTHORIZATION_BACKEND`` — a Python path to authorization backend.
+The default is ``djiki.auth.base.UnrestrictedAccess``, which grants full
+read/write permissions to all clients. The other included backends are
+``djiki.auth.base.OnlyAuthenticatedEdits`` and ``djiki.auth.base.OnlyAdminEdits``.
+
+``DJIKI_TEPLATING_BACKEND`` — a Python path to a templating backend.
+The default is ``djiki.templating.django``, which is a light wrapper over
+the standard Django template engine. Therefore you are not strictly bound to
+the default implementation. The author, for example, uses *Jinja2* in some
+of his projects.
 
 Parsers
 -------
@@ -87,6 +96,11 @@ images. The standard syntax of ``{{Image_name.jpg|Image title}}`` is
 still valid, however you may add size by typing
 ``{{Image_name.jpg|300x200|Image title}}`` or even omit the title:
 ``{{Image_name.jpg|300x200}}``.
+
+Templating
+----------
+
+
 
 Roadmap
 -------
