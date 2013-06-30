@@ -112,6 +112,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	'ga_processor.google_analytics',
 )
 
+AUTH_USER_MODEL = 'auth.User'
+
 DJIKI_PARSER = 'djiki.parsers.wikicreole'
 
 DJIKI_IMAGES_PATH = 'djimages/'		# relative to MEDIA_ROOT

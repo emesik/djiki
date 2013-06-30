@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -23,7 +22,8 @@ class Versioned(object):
 
 class Revision(models.Model):
 	created = models.DateTimeField(_("Created"), auto_now_add=True)
-	author = models.ForeignKey(User, verbose_name=_("Author"), null=True, blank=True)
+	author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"),
+			null=True, blank=True)
 	description = models.CharField(_("Description"), max_length=400, blank=True)
 
 	class Meta:
