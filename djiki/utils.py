@@ -49,3 +49,7 @@ def deurlize_title(title):
 
 def anchorize(txt):
 	return re.compile(r'[^\w_,\.-]+', re.UNICODE).sub('_', txt).strip('_')
+
+def get_templating_backend():
+	setting = getattr(settings, 'DJIKI_TEMPLATING_BACKEND', 'djiki.templating.django')
+	return _setting_to_instance(setting)

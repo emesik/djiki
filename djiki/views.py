@@ -4,12 +4,12 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
-from django.template import RequestContext, loader
-from django.template.response import TemplateResponse
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
 from urllib import urlencode, quote
 from . import models, forms, utils
+
+_templating = utils.get_templating_backend()
 
 def view(request, title, revision_pk=None):
 	url_title = utils.urlize_title(title)
@@ -23,9 +23,8 @@ def view(request, title, revision_pk=None):
 	try:
 		page = models.Page.objects.get(title=page_title)
 	except models.Page.DoesNotExist:
-		t = loader.get_template('djiki/not_found.html')
-		c = RequestContext(request, {'title': page_title})
-		return HttpResponseNotFound(t.render(c))
+		html = _templating.render_to_string('djiki/not_found.html', {'title': page_title}, request)
+		return HttpResponseNotFound(html)
 	if not auth.can_view(request, page):
 		raise PermissionDenied
 	if revision_pk:
@@ -47,7 +46,7 @@ def view(request, title, revision_pk=None):
 		response['Content-Disposition'] = 'attachment; filename=%s.txt' % quote(title.encode('utf-8'))
 		response.write(revision.content)
 		return response
-	return TemplateResponse(request, 'djiki/view.html',
+	return _templating.render_to_response(request, 'djiki/view.html',
 			{'page': page, 'revision': revision})
 
 def edit(request, title):
@@ -85,7 +84,7 @@ def edit(request, title):
 				form.save()
 				return HttpResponseRedirect(
 						reverse('djiki-page-view', kwargs={'title': url_title}))
-	return TemplateResponse(request, 'djiki/edit.html',
+	return _templating.render_to_response(request, 'djiki/edit.html',
 			{'form': form, 'page': page, 'preview_content': preview_content})
 
 def history(request, title):
@@ -98,7 +97,7 @@ def history(request, title):
 	if not auth.can_view_history(request, page):
 		raise PermissionDenied
 	history = page.revisions.order_by('-created')
-	return TemplateResponse(request, 'djiki/history.html', {'page': page, 'history': history})
+	return _templating.render_to_response(request, 'djiki/history.html', {'page': page, 'history': history})
 
 
 def diff(request, title):
@@ -117,7 +116,7 @@ def diff(request, title):
 		return HttpResponseNotFound()
 	dmp = diff_match_patch()
 	diff = dmp.diff_compute(from_rev.content, to_rev.content, True, 2)
-	return TemplateResponse(request, 'djiki/diff.html',
+	return _templating.render_to_response(request, 'djiki/diff.html',
 			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
 
 def revert(request, title, revision_pk):
@@ -149,7 +148,7 @@ def revert(request, title, revision_pk):
 					{'time': src_revision.created}
 		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page,
 				initial={'content': src_revision.content, 'description': description})
-	return TemplateResponse(request, 'djiki/edit.html',
+	return _templating.render_to_response(request, 'djiki/edit.html',
 			{'page': page, 'form': form, 'src_revision': src_revision})
 
 def undo(request, title, revision_pk):
@@ -200,7 +199,7 @@ def undo(request, title, revision_pk):
 					urlencode(urldata)))
 		form = forms.PageEditForm(data=request.POST or None, page=page,
 				initial={'content': content, 'description': description})
-	return TemplateResponse(request, 'djiki/edit.html', {'page': page, 'form': form})
+	return _templating.render_to_response(request, 'djiki/edit.html', {'page': page, 'form': form})
 
 def image_new(request):
 	auth = utils.get_auth_backend()
@@ -212,7 +211,7 @@ def image_new(request):
 			form.save()
 			return HttpResponseRedirect(
 					reverse('djiki-image-view', kwargs={'name': form.instance.image.name}))
-	return TemplateResponse(request, 'djiki/image_edit.html', {'form': form})
+	return _templating.render_to_response(request, 'djiki/image_edit.html', {'form': form})
 
 def image_view(request, name):
 	url_name = utils.urlize_title(name)
@@ -223,7 +222,7 @@ def image_view(request, name):
 	auth = utils.get_auth_backend()
 	if not auth.can_view(request, image):
 		raise PermissionDenied
-	return TemplateResponse(request, 'djiki/image_view.html', {'image': image})
+	return _templating.render_to_response(request, 'djiki/image_view.html', {'image': image})
 
 def image_edit(request, name):
 	url_name = utils.urlize_title(name)
@@ -243,7 +242,7 @@ def image_edit(request, name):
 			form.save()
 			return HttpResponseRedirect(
 					reverse('djiki-image-view', kwargs={'name': url_name}))
-	return TemplateResponse(request, 'djiki/image_edit.html', {'form': form})
+	return _templating.render_to_response(request, 'djiki/image_edit.html', {'form': form})
 
 def image_history(request, name):
 	url_name = utils.urlize_title(name)
@@ -255,4 +254,4 @@ def image_history(request, name):
 	if not auth.can_view_history(request, image):
 		raise PermissionDenied
 	history = image.revisions.order_by('-created')
-	return TemplateResponse(request, 'djiki/image_history.html', {'image': image, 'history': history})
+	return _templating.render_to_response(request, 'djiki/image_history.html', {'image': image, 'history': history})
