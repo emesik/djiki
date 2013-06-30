@@ -12,11 +12,13 @@ setup(
 	long_description = open('README.rst').read(),
 	author = 'Michał Sałaban',
 	author_email = 'michal@salaban.info',
-	requires = [
-		'creole',
+	install_requires = [
+		'django',
 		'diff_match_patch',
-		'sorl_thumbnail',
 	],
+	extras_require = {
+		'demo_site': ['sorl_thumbnail', 'creole'],
+		},
 	packages = find_packages(),
 	include_package_data = True,
 	classifiers = [
