@@ -68,9 +68,9 @@ read/write permissions to all clients. The other included backends are
 ``djiki.auth.base.OnlyAuthenticatedEdits`` and ``djiki.auth.base.OnlyAdminEdits``.
 
 ``DJIKI_TEPLATING_BACKEND`` — a Python path to a templating backend.
-The default is ``djiki.templating.django``, which is a light wrapper over
-the standard Django template engine. Therefore you are not strictly bound to
-the default implementation. The author, for example, uses *Jinja2* in some
+The default is ``djiki.templating.django_engine``, which is a light wrapper
+over the standard Django template engine. Therefore you are not strictly bound
+to the default implementation. The author, for example, uses *Jinja2* in some
 of his projects.
 
 Parsers
