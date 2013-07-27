@@ -16,9 +16,6 @@ setup(
 		'django',
 		'diff_match_patch',
 	],
-	extras_require = {
-		'demo_site': ['sorl_thumbnail', 'creole'],
-		},
 	packages = find_packages(),
 	include_package_data = True,
 	classifiers = [
