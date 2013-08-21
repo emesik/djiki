@@ -18,7 +18,7 @@ def html_diff(diff):
 		if op == diff_match_patch.DIFF_INSERT:
 			html.append("<span class=\"added\">%s</span>" % text)
 		elif op == diff_match_patch.DIFF_DELETE:
-			html.append("<span class=\"removed\">%s</del>" % text)
+			html.append("<span class=\"removed\">%s</span>" % text)
 		elif op == diff_match_patch.DIFF_EQUAL:
 			html.append("<span>%s</span>" % text)
 	return mark_safe("".join(html))

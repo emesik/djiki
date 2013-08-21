@@ -67,6 +67,10 @@ class SimpleTest(TestCase):
 		r = client.get(reverse('djiki-page-edit', kwargs={'title': title}))
 		self.assertEqual(r.status_code, 200)
 		r = client.post(reverse('djiki-page-edit', kwargs={'title': title}),
+				{'content': content, 'description': description, 'prev_revision': prev_rev,
+				'action': 'preview'})
+		self.assertEqual(r.status_code, 200)
+		r = client.post(reverse('djiki-page-edit', kwargs={'title': title}),
 				{'content': content, 'description': description, 'prev_revision': prev_rev})
 		self.assertEqual(r.status_code, 302)
 		p = models.Page.objects.get(title=title)
@@ -77,12 +81,41 @@ class SimpleTest(TestCase):
 		else:
 			self.assertEqual(p.last_revision().author, None)
 		self.assertEqual(p.last_revision().description, description)
+		return p.last_revision()
+
+	def _page_revert(self, revision):
+		client = Client()
+		try:
+			prev_rev = models.PageRevision.objects.filter(page__title=revision.page.title)\
+					.order_by('-created')[0].pk
+		except IndexError:
+			prev_rev = ''
+		r = client.get(reverse('djiki-page-revert',
+					kwargs={'title': revision.page.title, 'revision_pk': revision.pk}))
+		self.assertEqual(r.status_code, 200)
+		r = client.post(reverse('djiki-page-revert',
+					kwargs={'title': revision.page.title, 'revision_pk': revision.pk}),
+				{'content': revision.content, 'description': '', 'prev_revision': prev_rev,
+				'action': 'preview'})
+		self.assertEqual(r.status_code, 200)
+		r = client.post(reverse('djiki-page-revert',
+					kwargs={'title': revision.page.title, 'revision_pk': revision.pk}),
+				{'content': revision.content, 'description': '', 'prev_revision': prev_rev})
+		self.assertEqual(r.status_code, 302)
+		return revision.page.last_revision()
 
 	def test_subsequent_edits(self):
 		title = u"Test page"
 		self._page_edit(title, content1, description1)
 		self._page_edit(title, content2, description2)
 		self._page_edit(title, content3, description3)
+
+	def test_revert(self):
+		title = u"Revert page"
+		r1 = self._page_edit(title, content1, description1)
+		r2 = self._page_edit(title, content2, description2)
+		r1n = self._page_revert(r1)
+		self.assertEqual(r1n.content, r1.content)
 
 	def test_underscores(self):
 		title_raw  = u"Another test page, let's see..."
