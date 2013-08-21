@@ -40,6 +40,8 @@ class Page(models.Model, Versioned):
 		unique_together = ('title', 'language')
 
 	def __unicode__(self):
+		if self.language:
+			return u"%s:%s" % (self.language, self.title)
 		return self.title
 
 
