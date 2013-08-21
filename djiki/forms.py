@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.utils.translation import ugettext as _
 from diff_match_patch import diff_match_patch
 from . import models, utils
@@ -9,6 +10,7 @@ class PageEditForm(forms.ModelForm):
 		widget=forms.HiddenInput(),
 		required=False
 		)
+	language = forms.ChoiceField(choices=settings.LANGUAGES, widget=forms.HiddenInput)
 
 	class Meta:
 		model = models.PageRevision
@@ -20,6 +22,7 @@ class PageEditForm(forms.ModelForm):
 		if self.page.pk:
 			self.fields['prev_revision'].queryset = self.page.revisions.all()
 			self.fields['prev_revision'].initial = self.page.last_revision()
+		self.fields['language'].initial = self.page.language
 
 	def _rebase(self, base, latest, our):
 		dmp = diff_match_patch()

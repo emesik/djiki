@@ -54,14 +54,20 @@ def edit(request, title):
 	if title != url_title:
 		return HttpResponseRedirect(reverse('djiki-page-edit', kwargs={'title': url_title}))
 	page_title = utils.deurlize_title(title)
+	# We carry the language information within the form. This is needed to avoid mess in sites
+	# which store language info within a session (where user can switch it within a separate
+	# browser window).
+	# To get out of the chicken and egg problem, we read the lang straight from the request data,
+	# if available.
+	language = request.POST.get('language', utils.get_lang())
 	auth = utils.get_auth_backend()
 	try:
-		page = models.Page.objects.get(title=page_title, language=utils.get_lang())
+		page = models.Page.objects.get(title=page_title, language=language)
 		last_content = page.last_revision().content
 		if not auth.can_edit(request, page):
 			raise PermissionDenied
 	except models.Page.DoesNotExist:
-		page = models.Page(title=page_title)
+		page = models.Page(title=page_title, language=language)
 		last_content = ''
 		if not auth.can_create(request, page):
 			raise PermissionDenied
@@ -125,7 +131,8 @@ def revert(request, title, revision_pk):
 		return HttpResponseRedirect(
 				reverse('djiki-page-revert', kwargs={'title': url_title, 'revision_pk': revision_pk}))
 	page_title = utils.deurlize_title(title)
-	page = get_object_or_404(models.Page, title=page_title, language=utils.get_lang())
+	language = request.POST.get('language', utils.get_lang())	# see comment in edit()
+	page = get_object_or_404(models.Page, title=page_title, language=language)
 	auth = utils.get_auth_backend()
 	if not auth.can_edit(request, page):
 		raise PermissionDenied
@@ -155,7 +162,8 @@ def undo(request, title, revision_pk):
 		return HttpResponseRedirect(
 				reverse('djiki-page-undo', kwargs={'title': url_title, 'revision_pk': revision_pk}))
 	page_title = utils.deurlize_title(title)
-	page = get_object_or_404(models.Page, title=page_title, language=utils.get_lang())
+	language = request.POST.get('language', utils.get_lang())	# see comment in edit()
+	page = get_object_or_404(models.Page, title=page_title, language=language)
 	auth = utils.get_auth_backend()
 	if not auth.can_edit(request, page):
 		raise PermissionDenied
