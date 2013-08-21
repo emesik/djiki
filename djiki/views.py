@@ -21,7 +21,7 @@ def view(request, title, revision_pk=None):
 	page_title = utils.deurlize_title(title)
 	auth = utils.get_auth_backend()
 	try:
-		page = models.Page.objects.get(title=page_title)
+		page = models.Page.objects.get(title=page_title, language=utils.get_lang())
 	except models.Page.DoesNotExist:
 		html = _templating.render_to_string('djiki/not_found.html', {'title': page_title}, request)
 		return HttpResponseNotFound(html)
@@ -56,7 +56,7 @@ def edit(request, title):
 	page_title = utils.deurlize_title(title)
 	auth = utils.get_auth_backend()
 	try:
-		page = models.Page.objects.get(title=page_title)
+		page = models.Page.objects.get(title=page_title, language=utils.get_lang())
 		last_content = page.last_revision().content
 		if not auth.can_edit(request, page):
 			raise PermissionDenied
@@ -92,7 +92,7 @@ def history(request, title):
 	if title != url_title:
 		return HttpResponseRedirect(reverse('djiki-page-history', kwargs={'title': url_title}))
 	page_title = utils.deurlize_title(title)
-	page = get_object_or_404(models.Page, title=page_title)
+	page = get_object_or_404(models.Page, title=page_title, language=utils.get_lang())
 	auth = utils.get_auth_backend()
 	if not auth.can_view_history(request, page):
 		raise PermissionDenied
@@ -105,7 +105,7 @@ def diff(request, title):
 	if title != url_title:
 		return HttpResponseNotFound()
 	page_title = utils.deurlize_title(title)
-	page = get_object_or_404(models.Page, title=page_title)
+	page = get_object_or_404(models.Page, title=page_title, language=utils.get_lang())
 	auth = utils.get_auth_backend()
 	if not auth.can_view_history(request, page):
 		raise PermissionDenied
@@ -127,7 +127,7 @@ def revert(request, title, revision_pk):
 		return HttpResponseRedirect(
 				reverse('djiki-page-revert', kwargs={'title': url_title, 'revision_pk': revision_pk}))
 	page_title = utils.deurlize_title(title)
-	page = get_object_or_404(models.Page, title=page_title)
+	page = get_object_or_404(models.Page, title=page_title, language=utils.get_lang())
 	auth = utils.get_auth_backend()
 	if not auth.can_edit(request, page):
 		raise PermissionDenied
@@ -157,7 +157,7 @@ def undo(request, title, revision_pk):
 		return HttpResponseRedirect(
 				reverse('djiki-page-undo', kwargs={'title': url_title, 'revision_pk': revision_pk}))
 	page_title = utils.deurlize_title(title)
-	page = get_object_or_404(models.Page, title=page_title)
+	page = get_object_or_404(models.Page, title=page_title, language=utils.get_lang())
 	auth = utils.get_auth_backend()
 	if not auth.can_edit(request, page):
 		raise PermissionDenied

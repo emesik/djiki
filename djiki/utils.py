@@ -3,6 +3,7 @@ import warnings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.importlib import import_module
+from django.utils.translation import get_language
 
 def _setting_to_instance(setting):
 	if isinstance(setting, basestring):
@@ -53,3 +54,8 @@ def anchorize(txt):
 def get_templating_backend():
 	setting = getattr(settings, 'DJIKI_TEMPLATING_BACKEND', 'djiki.templating.django_engine')
 	return _setting_to_instance(setting)
+
+def get_lang():
+	if getattr(settings, 'DJIKI_I18N', getattr(settings, 'USE_I18N', False)):
+		return get_language()
+	return getattr(settings, 'LANGUAGE_CODE', '')
