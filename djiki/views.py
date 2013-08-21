@@ -120,8 +120,6 @@ def diff(request, title):
 			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
 
 def revert(request, title, revision_pk):
-	if not allow_anonymous_edits() and not request.user.is_authenticated():
-		raise PermissionDenied
 	url_title = utils.urlize_title(title)
 	if title != url_title:
 		return HttpResponseRedirect(
