@@ -9,6 +9,7 @@ except ImportError:
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
+from django.utils.translation import get_language
 from . import models
 from .auth.base import UnrestrictedAccess
 
@@ -68,10 +69,11 @@ class SimpleTest(TestCase):
 		self.assertEqual(r.status_code, 200)
 		r = client.post(reverse('djiki-page-edit', kwargs={'title': title}),
 				{'content': content, 'description': description, 'prev_revision': prev_rev,
-				'action': 'preview'})
+				'action': 'preview', 'language': get_language()})
 		self.assertEqual(r.status_code, 200)
 		r = client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': content, 'description': description, 'prev_revision': prev_rev})
+				{'content': content, 'description': description, 'prev_revision': prev_rev,
+				'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 		p = models.Page.objects.get(title=title)
 		self.assertEqual(p.revisions.count(), rev_count + 1)
@@ -96,11 +98,12 @@ class SimpleTest(TestCase):
 		r = client.post(reverse('djiki-page-revert',
 					kwargs={'title': revision.page.title, 'revision_pk': revision.pk}),
 				{'content': revision.content, 'description': '', 'prev_revision': prev_rev,
-				'action': 'preview'})
+				'action': 'preview', 'language': get_language()})
 		self.assertEqual(r.status_code, 200)
 		r = client.post(reverse('djiki-page-revert',
 					kwargs={'title': revision.page.title, 'revision_pk': revision.pk}),
-				{'content': revision.content, 'description': '', 'prev_revision': prev_rev})
+				{'content': revision.content, 'description': '', 'prev_revision': prev_rev,
+				'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 		return revision.page.last_revision()
 
@@ -141,9 +144,8 @@ class SimpleTest(TestCase):
 		client = Client()
 		# attempt to save a new version with an outdated base revision
 		r = client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': content3, 'description': description3, 'prev_revision': first_revision.pk})
-		if r.status_code == 200:
-			print r.content
+				{'content': content3, 'description': description3,
+				'prev_revision': first_revision.pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 
 	def test_edits(self):
@@ -151,73 +153,73 @@ class SimpleTest(TestCase):
 		settings.DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.UnrestrictedAccess'
 		# anonymous create
 		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": ""})
+				{'content': "blah", "description": "", 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 		# anonymous edit
 		last_pk = models.Page.objects.get(title=title).last_revision().pk
 		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 		# authenticated edit
 		last_pk = models.Page.objects.get(title=title).last_revision().pk
 		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 		# admin edit
 		last_pk = models.Page.objects.get(title=title).last_revision().pk
 		r = self.admin_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 
 		settings.DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.OnlyAuthenticatedEdits'
 		# anonymous create
 		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 1'}),
-				{'content': "blah", "description": ""})
+				{'content': "blah", "description": "", 'language': get_language()})
 		self.assertEqual(r.status_code, 403)
 		# anonymous edit
 		last_pk = models.Page.objects.get(title=title).last_revision().pk
 		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 403)
 		# authenticated create
 		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 2'}),
-				{'content': "blah", "description": ""})
+				{'content': "blah", "description": "", 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 		# authenticated edit
 		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 		# admin edit
 		last_pk = models.Page.objects.get(title=title).last_revision().pk
 		r = self.admin_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 
 		settings.DJIKI_AUTHORIZATION_BACKEND = 'djiki.auth.base.OnlyAdminEdits'
 		# anonymous create
 		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 3'}),
-				{'content': "blah", "description": ""})
+				{'content': "blah", "description": "", 'language': get_language()})
 		self.assertEqual(r.status_code, 403)
 		# anonymous edit
 		last_pk = models.Page.objects.get(title=title).last_revision().pk
 		r = self.anon_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 403)
 		# authenticated create
 		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 4'}),
-				{'content': "blah", "description": ""})
+				{'content': "blah", "description": "", 'language': get_language()})
 		self.assertEqual(r.status_code, 403)
 		# authenticated edit
 		r = self.user_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 403)
 		# admin create
 		r = self.admin_client.post(reverse('djiki-page-edit', kwargs={'title': u'Other title 5'}),
-				{'content': "blah", "description": ""})
+				{'content': "blah", "description": "", 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 		# admin edit
 		r = self.admin_client.post(reverse('djiki-page-edit', kwargs={'title': title}),
-				{'content': "blah", "description": "", 'prev_revision': last_pk})
+				{'content': "blah", "description": "", 'prev_revision': last_pk, 'language': get_language()})
 		self.assertEqual(r.status_code, 302)
 
 	def test_history_view(self):
