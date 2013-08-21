@@ -32,10 +32,12 @@ class Revision(models.Model):
 
 
 class Page(models.Model, Versioned):
-	title = models.CharField(_("Title"), max_length=256, unique=True)
+	title = models.CharField(_("Title"), max_length=256)
+	language = models.CharField(_("Language"), max_length=5, blank=True, default='')
 
 	class Meta:
 		ordering = ('title',)
+		unique_together = ('title', 'language')
 
 	def __unicode__(self):
 		return self.title
