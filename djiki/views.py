@@ -49,6 +49,13 @@ def view(request, title, revision_pk=None):
 	return _templating.render_to_response(request, 'djiki/view.html',
 			{'page': page, 'revision': revision})
 
+def _prepare_preview(request, form):
+	messages.info(request, mark_safe(_("The content you see on this page is shown only as "
+			"a preview. <strong>No changes have been saved yet.</strong> Please "
+			"review the modifications and use the <em>Save</em> button to store "
+			"them permanently.")))
+	return form.cleaned_data.get('content', form.data['content'])
+
 def edit(request, title):
 	url_title = utils.urlize_title(title)
 	if title != url_title:
@@ -71,19 +78,13 @@ def edit(request, title):
 			data=request.POST or None, instance=revision, page=page,
 			initial={'content': last_content})
 	preview_content = None
-	if request.method == 'POST':
-		is_preview = request.POST.get('action') == 'preview'
-		if form.is_valid():
-			if is_preview:
-				preview_content = form.cleaned_data.get('content', form.data['content'])
-				messages.info(request, mark_safe(_("The content you see on this page is shown only as "
-						"a preview. <strong>No changes have been saved yet.</strong> Please "
-						"review the modifications and use the <em>Save</em> button to store "
-						"them permanently.")))
-			else:
-				form.save()
-				return HttpResponseRedirect(
-						reverse('djiki-page-view', kwargs={'title': url_title}))
+	if form.is_valid():
+		if request.POST.get('action') == 'preview':
+			preview_content = _prepare_preview(request, form)
+		else:
+			form.save()
+			return HttpResponseRedirect(
+					reverse('djiki-page-view', kwargs={'title': url_title}))
 	return _templating.render_to_response(request, 'djiki/edit.html',
 			{'form': form, 'page': page, 'preview_content': preview_content})
 
@@ -132,11 +133,16 @@ def revert(request, title, revision_pk):
 	src_revision = get_object_or_404(models.PageRevision, page=page, pk=revision_pk)
 	new_revision = models.PageRevision(page=page,
 			author=request.user if request.user.is_authenticated() else None)
+	preview_content = None
 	if request.method == 'POST':
 		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page)
 		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect(reverse('djiki-page-view', kwargs={'title': url_title}))
+			if request.POST.get('action') == 'preview':
+				preview_content = _prepare_preview(request, form)
+			else:
+				form.save()
+				return HttpResponseRedirect(
+						reverse('djiki-page-view', kwargs={'title': url_title}))
 	else:
 		if src_revision.author:
 			description = _("Reverted to revision of %(time)s by %(user)s.") % \
@@ -147,7 +153,8 @@ def revert(request, title, revision_pk):
 		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page,
 				initial={'content': src_revision.content, 'description': description})
 	return _templating.render_to_response(request, 'djiki/edit.html',
-			{'page': page, 'form': form, 'src_revision': src_revision})
+			{'page': page, 'form': form, 'src_revision': src_revision,
+				'preview_content': preview_content})
 
 def undo(request, title, revision_pk):
 	url_title = utils.urlize_title(title)
@@ -162,11 +169,16 @@ def undo(request, title, revision_pk):
 	src_revision = get_object_or_404(models.PageRevision, page=page, pk=revision_pk)
 	new_revision = models.PageRevision(page=page,
 			author=request.user if request.user.is_authenticated() else None)
+	preview_content = None
 	if request.method == 'POST':
 		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page)
 		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect(reverse('djiki-page-view', kwargs={'title': url_title}))
+			if request.POST.get('action') == 'preview':
+				preview_content = _prepare_preview(request, form)
+			else:
+				form.save()
+				return HttpResponseRedirect(
+						reverse('djiki-page-view', kwargs={'title': url_title}))
 	else:
 		if src_revision.author:
 			description = _("Undid revision of %(time)s by %(user)s.") % \
@@ -197,7 +209,8 @@ def undo(request, title, revision_pk):
 					urlencode(urldata)))
 		form = forms.PageEditForm(data=request.POST or None, page=page,
 				initial={'content': content, 'description': description})
-	return _templating.render_to_response(request, 'djiki/edit.html', {'page': page, 'form': form})
+	return _templating.render_to_response(request, 'djiki/edit.html',
+			{'page': page, 'form': form, 'preview_content': preview_content})
 
 def image_new(request):
 	auth = utils.get_auth_backend()
