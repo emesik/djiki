@@ -152,8 +152,9 @@ def revert(request, title, revision_pk):
 						reverse('djiki-page-view', kwargs={'title': url_title}))
 	else:
 		if src_revision.author:
-			description = _("Reverted to revision of %(time)s by %(user)s.") % \
-					{'time': src_revision.created, 'user': src_revision.user.username}
+			description = _("Reverted to revision of %(time)s by %(author)s.") % \
+					{'time': src_revision.created,
+					'author': getattr(src_revision.author, src_revision.author.USERNAME_FIELD)}
 		else:
 			description = _("Reverted to anonymous revision of %(time)s.") % \
 					{'time': src_revision.created}
@@ -189,8 +190,9 @@ def undo(request, title, revision_pk):
 						reverse('djiki-page-view', kwargs={'title': url_title}))
 	else:
 		if src_revision.author:
-			description = _("Undid revision of %(time)s by %(user)s.") % \
-					{'time': src_revision.created, 'user': src_revision.user.username}
+			description = _("Undid revision of %(time)s by %(author)s.") % \
+					{'time': src_revision.created,
+					'author': getattr(src_revision.author, src_revision.author.USERNAME_FIELD)}
 		else:
 			description = _("Undid anonymous revision of %(time)s.") % {'time': src_revision.created}
 		try:
