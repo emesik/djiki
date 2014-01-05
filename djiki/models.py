@@ -48,11 +48,6 @@ class PageRevision(Revision):
 	def __unicode__(self):
 		return u"%s: %s" % (self.page, self.description)
 
-def invalidate_content(sender, instance=None, **kwargs):
-	instance.page.rendered_content = ''
-	instance.page.save()
-models.signals.post_save.connect(invalidate_content, sender=PageRevision)
-
 
 class Image(models.Model, Versioned):
 	name = models.CharField(_("Name"), max_length=128, unique=True)
