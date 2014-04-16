@@ -1,0 +1,228 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-07-14 14:41+0800\n"
+"PO-Revision-Date: 2011-07-14 15:04+0800\n"
+"Last-Translator: Perchouli <jp.chenyang>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: forms.py:40
+msgid "Somebody else has modified this page in the meantime. It is not possible to merge all the changes automatically. Stash your version somewhere else and reapply with the latest revision."
+msgstr "在您编辑的过程中已经有其他人修改了这一词条，系统无法全部手动合并更改。"
+
+#: forms.py:76
+msgid "Somebody else has modified this image in the meantime. Please review these changes before uploading your version."
+msgstr "在您编辑的过程中已经有其他人修改了这张图片，请先确认更改后再上传。"
+
+#: forms.py:88
+#: models.py:58
+msgid "Name"
+msgstr "文件名"
+
+#: forms.py:89
+msgid "If you leave it empty, the original name of the uploaded file will be used."
+msgstr "如果留空，原文件名将被保留。"
+
+#: forms.py:103
+msgid "An image of the same name already exists. Please enter different name."
+msgstr "同名图片文件已经存在，请输入其他名字"
+
+#: models.py:25
+msgid "Created"
+msgstr "创建"
+
+#: models.py:26
+#: templates/djiki/history.html:14
+#: templates/djiki/image_history.html:12
+msgid "Author"
+msgstr "作者"
+
+#: models.py:27
+#: templates/djiki/history.html:15
+#: templates/djiki/image_history.html:14
+msgid "Description"
+msgstr "描述"
+
+#: models.py:35
+msgid "Title"
+msgstr "标题"
+
+#: models.py:46
+msgid "Content"
+msgstr "内容"
+
+#: models.py:69
+msgid "File"
+msgstr "文件"
+
+#: views.py:32
+#, python-format
+msgid "The version you are viewing is not the latest one, but represents an older revision of this page, which may have been significantly modified. If it is not what you intended to view, <a href=\"%(url)s\">proceed to the latest version</a>."
+msgstr "您现在查看的内容不是这个词条的最新版本，如果您想查看最新版本请  <a href=\"%(url)s\">点击这里</a>。"
+
+#: views.py:71
+msgid "The content you see on this page is shown only as a preview. <strong>No changes have been saved yet.</strong> Please review the modifications and use the <em>Save</em> button to store them permanently."
+msgstr "您现在看到的是预览效果，<strong>还没有保存</strong>。请确定当前修改后使用<em>保存</em>按钮保存您的修改。"
+
+#: views.py:126
+#, python-format
+msgid "Reverted to revision of %(time)s by %(user)s."
+msgstr "%(time)s由%(user)s进行回退。"
+
+#: views.py:129
+#, python-format
+msgid "Reverted to anonymous revision of %(time)s."
+msgstr "在%(time)s回退到匿名版本。"
+
+#: views.py:155
+#, python-format
+msgid "Undid revision of %(time)s by %(user)s."
+msgstr "由%(user)s在%(time)s 恢复。"
+
+#: views.py:158
+#, python-format
+msgid "Undid anonymous revision of %(time)s."
+msgstr "于 %(time)s 恢复匿名版本"
+
+#: views.py:170
+msgid "It was impossible to automatically undo the change you have selected. Perhaps the page has been modified too much in the meantime. Review the following content comparison, which represents the change you tried to undo, and apply the changes manually to the latest revision."
+msgstr "抱歉，系统无法对您选择的内容进行自动测小，可能是因为页面修改了太多内容。"
+
+#: templates/djiki/base_image.html:3
+#: templates/djiki/base_image.html.py:6
+msgid "Image"
+msgstr "图片"
+
+#: templates/djiki/base_image.html:7
+msgid "Edit image"
+msgstr "编辑图片"
+
+#: templates/djiki/base_image.html:8
+#: templates/djiki/base_page.html:8
+msgid "History"
+msgstr "历史"
+
+#: templates/djiki/base_image.html:9
+#: templates/djiki/base_page.html:10
+msgid "Upload"
+msgstr "上传"
+
+#: templates/djiki/base_page.html:6
+msgid "Page"
+msgstr "词条"
+
+#: templates/djiki/base_page.html:7
+#: templates/djiki/edit.html:3
+msgid "Edit page"
+msgstr "编辑词条"
+
+#: templates/djiki/base_page.html:9
+msgid "Get source"
+msgstr "查看源码"
+
+#: templates/djiki/diff.html:3
+msgid "Content comparison"
+msgstr "内容比较"
+
+#: templates/djiki/diff.html:8
+#, python-format
+msgid ""
+"\n"
+"\t\tComparing content of the page between %(from_time)s and %(to_time)s."
+msgstr ""
+"\n"
+"\t\t对比%(from_time)s 和 %(to_time)s 之间的差异。"
+
+#: templates/djiki/edit.html:34
+#: templates/djiki/image_edit.html:13
+msgid "Save"
+msgstr "保存"
+
+#: templates/djiki/edit.html:35
+msgid "Preview"
+msgstr "预览"
+
+#: templates/djiki/history.html:3
+msgid "Page history"
+msgstr "编辑历史"
+
+#: templates/djiki/history.html:12
+#: templates/djiki/image_history.html:11
+msgid "Modification time"
+msgstr "修改时间"
+
+#: templates/djiki/history.html:13
+msgid "Compare"
+msgstr "对比"
+
+#: templates/djiki/history.html:16
+msgid "Operations"
+msgstr "操作"
+
+#: templates/djiki/history.html:23
+msgid "View"
+msgstr "查看"
+
+#: templates/djiki/history.html:25
+#, python-format
+msgid "%(timesince)s ago"
+msgstr "%(timesince)s 前"
+
+#: templates/djiki/history.html:33
+#: templates/djiki/image_history.html:23
+msgid "anonymous"
+msgstr "匿名"
+
+#: templates/djiki/history.html:37
+msgid "Revert to this version by discarding all later modifications."
+msgstr "回退到当前版本并抛弃周后的修改"
+
+#: templates/djiki/history.html:37
+msgid "revert"
+msgstr "回退"
+
+#: templates/djiki/history.html:38
+msgid "Undo this revision."
+msgstr "撤销当前版本"
+
+#: templates/djiki/history.html:38
+msgid "undo"
+msgstr "撤销"
+
+#: templates/djiki/image_edit.html:3
+#: templates/djiki/image_edit.html.py:7
+msgid "New image"
+msgstr "新图片"
+
+#: templates/djiki/image_history.html:3
+msgid "Image history"
+msgstr "图片历史"
+
+#: templates/djiki/image_history.html:13
+msgid "Thumbnail"
+msgstr "缩略图"
+
+#: templates/djiki/not_found.html:5
+#, python-format
+msgid ""
+"The page with title <strong>%(title)s</strong> does not exist.\n"
+"Please make sure your spelling is correct."
+msgstr "<strong>%(title)s</strong>不存在，请确认您的拼写。"
+
+#: templates/djiki/not_found.html:10
+#, python-format
+msgid ""
+"You may also <a href=\"%(edit_url)s\">create a new page</a>\n"
+"named <strong>%(title)s</strong>."
+msgstr "您可以<a href=\"%(edit_url)s\">创建</a>名为<strong>%(title)s</strong>的词条。"
+
