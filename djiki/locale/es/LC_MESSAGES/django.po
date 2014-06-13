@@ -1,0 +1,274 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: djiki\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-06-12 11:03+0200\n"
+"PO-Revision-Date: 2014-06-12 11:03+0200\n"
+"Last-Translator: Marcos Lopez <markattack@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\djiki\forms.py:40
+msgid ""
+"Somebody else has modified this page in the meantime. It is not possible to "
+"merge all the changes automatically. Stash your version somewhere else and "
+"reapply with the latest revision."
+msgstr ""
+"Alguien ha modificado esta página al mismo tiempo. No es posible "
+"fusionar todos los cambios de forma automática. Guarda tu versión en cualquier otro lugar y "
+"y vuelve a guardar con la última revisión."
+
+#: .\djiki\forms.py:76
+msgid ""
+"Somebody else has modified this image in the meantime. Please review these "
+"changes before uploading your version."
+msgstr ""
+"Alguien ha modificado esta imagen al mismo tiempo. Revisad los "
+"cambios antes de subir vuestra versión."
+
+#: .\djiki\forms.py:88 .\djiki\models.py:53
+msgid "Name"
+msgstr "Nombre"
+
+#: .\djiki\forms.py:89
+msgid ""
+"If you leave it empty, the original name of the uploaded file will be used."
+msgstr ""
+"Si lo dejáis en blanco se utilitzará el nombre original de fichero subido."
+
+#: .\djiki\forms.py:103
+msgid "An image of the same name already exists. Please enter different name."
+msgstr "Ya existe una imagen con el mismo nombre. Introduce un nombre diferente"
+
+#: .\djiki\models.py:24
+msgid "Created"
+msgstr "Creado"
+
+#: .\djiki\models.py:25 .\djiki\templates\djiki\history.html:15
+#: .\djiki\templates\djiki\image_history.html:12
+#: .\djiki\templates\djiki\latest_changes.html:13
+msgid "Author"
+msgstr "Autor"
+
+#: .\djiki\models.py:27 .\djiki\templates\djiki\history.html:16
+#: .\djiki\templates\djiki\image_history.html:14
+#: .\djiki\templates\djiki\latest_changes.html:14
+msgid "Description"
+msgstr "Descripción"
+
+#: .\djiki\models.py:35
+msgid "Title"
+msgstr "Título"
+
+#: .\djiki\models.py:46
+msgid "Content"
+msgstr "Contenido"
+
+#: .\djiki\models.py:64
+msgid "File"
+msgstr "Fichero"
+
+#: .\djiki\views.py:37
+#, python-format
+msgid ""
+"The version you are viewing is not the latest one, but represents an older "
+"revision of this page, which may have been significantly modified. If it is "
+"not what you intended to view, <a href=\"%(url)s\">proceed to the latest "
+"version</a>."
+msgstr ""
+"Esta versión no es la última versión, es una revisión anterior "
+"de esta página, la cual puede haver estado modificada de forma significativa. Si no es "
+"la que queríais ver, <a href=\"%(url)s\">id a la última "
+"versión</a>."
+
+#: .\djiki\views.py:53
+msgid ""
+"The content you see on this page is shown only as a preview. <strong>No "
+"changes have been saved yet.</strong> Please review the modifications and "
+"use the <em>Save</em> button to store them permanently."
+msgstr ""
+"El contenido que veis en esta página está siendo mostrado solo como una previsualización. <strong>Aún "
+"no se han guardado los cambios.</strong> Revisad las modificaciones y "
+"clicad el botón<em>Guardar</em> para guardarlos de forma permanente."
+
+#: .\djiki\views.py:148
+#, python-format
+msgid "Reverted to revision of %(time)s by %(author)s."
+msgstr "Revertido a la revisión de %(time)s de %(author)s."
+
+#: .\djiki\views.py:152
+#, python-format
+msgid "Reverted to anonymous revision of %(time)s."
+msgstr "Revertido a la revisión anónima de %(time)s."
+
+#: .\djiki\views.py:185
+#, python-format
+msgid "Undid revision of %(time)s by %(author)s."
+msgstr "Se ha deshecho la revisión de %(time)s per %(author)s."
+
+#: .\djiki\views.py:189
+#, python-format
+msgid "Undid anonymous revision of %(time)s."
+msgstr "Se ha deshecho la revisión anónima de %(time)s."
+
+#: .\djiki\views.py:201
+msgid ""
+"It was impossible to automatically undo the change you have selected. "
+"Perhaps the page has been modified too much in the meantime. Review the "
+"following content comparison, which represents the change you tried to undo, "
+"and apply the changes manually to the latest revision."
+msgstr ""
+"Ha sido imposible deshacer automáticamente los cambios selecionados. "
+"Puede ser que la página haya recibido muchos cambios simultáneamente. Revisad la "
+"siguiente comparación de contenido, la qual representa el cambio que habéis escogido deshacer, "
+"y aplicado los cambios manualmente en la última revisión."
+
+#: .\djiki\templates\djiki\base_image.html:4
+#: .\djiki\templates\djiki\base_image.html:7
+msgid "Image"
+msgstr "Imagen"
+
+#: .\djiki\templates\djiki\base_image.html:8
+msgid "Edit image"
+msgstr "Editar imagen"
+
+#: .\djiki\templates\djiki\base_image.html:9
+#: .\djiki\templates\djiki\base_page.html:9
+msgid "History"
+msgstr "Histórico"
+
+#: .\djiki\templates\djiki\base_image.html:10
+#: .\djiki\templates\djiki\base_page.html:11
+msgid "Upload"
+msgstr "Subir"
+
+#: .\djiki\templates\djiki\base_page.html:7
+#: .\djiki\templates\djiki\latest_changes.html:11
+msgid "Page"
+msgstr "Página"
+
+#: .\djiki\templates\djiki\base_page.html:8
+#: .\djiki\templates\djiki\edit.html:3
+msgid "Edit page"
+msgstr "Editar página"
+
+#: .\djiki\templates\djiki\base_page.html:10
+msgid "Get source"
+msgstr "Obtener fuente"
+
+#: .\djiki\templates\djiki\diff.html:3
+msgid "Content comparison"
+msgstr "Comparación de contenido"
+
+#: .\djiki\templates\djiki\diff.html:8
+#, python-format
+msgid ""
+"\n"
+"\t\tComparing content of the page between %(from_time)s and %(to_time)s."
+msgstr ""
+"\n"
+"\t\tComparando contenido de la pàgina entre %(from_time)s y %(to_time)s."
+
+#: .\djiki\templates\djiki\edit.html:34
+#: .\djiki\templates\djiki\image_edit.html:13
+msgid "Save"
+msgstr "Guardar"
+
+#: .\djiki\templates\djiki\edit.html:35
+msgid "Preview"
+msgstr "Previsualizar"
+
+#: .\djiki\templates\djiki\history.html:4
+msgid "Page history"
+msgstr "Histórico de la página"
+
+#: .\djiki\templates\djiki\history.html:13
+#: .\djiki\templates\djiki\image_history.html:11
+#: .\djiki\templates\djiki\latest_changes.html:12
+msgid "Modification time"
+msgstr "Hora de modificación"
+
+#: .\djiki\templates\djiki\history.html:14
+msgid "Compare"
+msgstr "Comparar"
+
+#: .\djiki\templates\djiki\history.html:17
+msgid "Operations"
+msgstr "Operaciones"
+
+#: .\djiki\templates\djiki\history.html:24
+msgid "View"
+msgstr "Ver"
+
+#: .\djiki\templates\djiki\history.html:26
+#: .\djiki\templates\djiki\latest_changes.html:24
+#, python-format
+msgid "%(timesince)s ago"
+msgstr "Hace %(timesince)s"
+
+#: .\djiki\templates\djiki\history.html:34
+#: .\djiki\templates\djiki\image_history.html:23
+#: .\djiki\templates\djiki\latest_changes.html:28
+msgid "anonymous"
+msgstr "anònim"
+
+#: .\djiki\templates\djiki\history.html:38
+msgid "Revert to this version by discarding all later modifications."
+msgstr "Revertir a esta versión descartando todas las modificaciones anteriores."
+
+#: .\djiki\templates\djiki\history.html:38
+msgid "revert"
+msgstr "revertir"
+
+#: .\djiki\templates\djiki\history.html:39
+msgid "Undo this revision."
+msgstr "Deshacer esta revisión"
+
+#: .\djiki\templates\djiki\history.html:39
+msgid "undo"
+msgstr "deshacer"
+
+#: .\djiki\templates\djiki\image_edit.html:3
+#: .\djiki\templates\djiki\image_edit.html:7
+msgid "New image"
+msgstr "Nueva imagen"
+
+#: .\djiki\templates\djiki\image_history.html:3
+msgid "Image history"
+msgstr "Histórico de la imagen"
+
+#: .\djiki\templates\djiki\image_history.html:13
+msgid "Thumbnail"
+msgstr "Miniatura de la imagen"
+
+#: .\djiki\templates\djiki\latest_changes.html:3
+#: .\djiki\templates\djiki\latest_changes.html:7
+msgid "Latest changes"
+msgstr "Últimos cambios"
+
+#: .\djiki\templates\djiki\not_found.html:6
+#, python-format
+msgid ""
+"The page with title <strong>%(title)s</strong> does not exist.\n"
+"Please make sure your spelling is correct.\n"
+msgstr ""
+"No existe ninguna página con el título <strong>%(title)s</strong>.\n"
+"Comprobad que lo habéis escrito correctamente.\n"
+
+#: .\djiki\templates\djiki\not_found.html:11
+#, python-format
+msgid ""
+"You may also <a href=\"%(edit_url)s\">create a new page</a>\n"
+"named <strong>%(title)s</strong>.\n"
+msgstr ""
+"También podéis <a href=\"%(edit_url)s\">crear una nueva página</a>\n"
+"llamada <strong>%(title)s</strong>.\n"
