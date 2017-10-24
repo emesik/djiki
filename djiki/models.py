@@ -23,7 +23,7 @@ class Versioned(object):
 class Revision(models.Model):
 	created = models.DateTimeField(_("Created"), auto_now_add=True)
 	author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"),
-			null=True, blank=True)
+			null=True, blank=True, on_delete=models.PROTECT)
 	description = models.CharField(_("Description"), max_length=400, blank=True)
 
 	class Meta:
@@ -42,7 +42,7 @@ class Page(models.Model, Versioned):
 
 
 class PageRevision(Revision):
-	page = models.ForeignKey(Page, related_name='revisions')
+	page = models.ForeignKey(Page, related_name='revisions', on_delete=models.CASCADE)
 	content = models.TextField(_("Content"), blank=True)
 
 	def __unicode__(self):
@@ -60,5 +60,5 @@ class Image(models.Model, Versioned):
 
 
 class ImageRevision(Revision):
-	image = models.ForeignKey(Image, related_name='revisions')
+	image = models.ForeignKey(Image, related_name='revisions', on_delete=models.CASCADE)
 	file = models.FileField(_("File"), upload_to=settings.DJIKI_IMAGES_PATH)
