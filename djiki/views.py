@@ -41,7 +41,7 @@ def view(request, title, revision_pk=None):
 					'url': reverse('djiki-page-view', kwargs={'title': url_title})}))
 	else:
 		revision = page.last_revision()
-	if request.REQUEST.get('raw', ''):
+	if request.POST.get('raw', request.GET.get('raw','')):
 		response = HttpResponse(mimetype='text/plain')
 		response['Content-Disposition'] = 'attachment; filename=%s.txt' % quote(title.encode('utf-8'))
 		response.write(revision.content)

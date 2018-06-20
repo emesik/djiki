@@ -1,8 +1,8 @@
+from importlib import import_module
 import re
 import warnings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.importlib import import_module
 from django.utils.translation import get_language
 
 def _setting_to_instance(setting):

@@ -1,105 +1,69 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import migrations, models
+import django.db.models.deletion
 from django.conf import settings
-
-AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
-
-class Migration(SchemaMigration):
-
-    def forwards(self, orm):
-        # Adding model 'Page'
-        db.create_table(u'djiki_page', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(unique=True, max_length=256)),
-        ))
-        db.send_create_signal(u'djiki', ['Page'])
-
-        # Adding model 'PageRevision'
-        db.create_table(u'djiki_pagerevision', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm[AUTH_USER_MODEL], null=True, blank=True)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=400, blank=True)),
-            ('page', self.gf('django.db.models.fields.related.ForeignKey')(related_name='revisions', to=orm['djiki.Page'])),
-            ('content', self.gf('django.db.models.fields.TextField')(blank=True)),
-        ))
-        db.send_create_signal(u'djiki', ['PageRevision'])
-
-        # Adding model 'Image'
-        db.create_table(u'djiki_image', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128)),
-        ))
-        db.send_create_signal(u'djiki', ['Image'])
-
-        # Adding model 'ImageRevision'
-        db.create_table(u'djiki_imagerevision', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm[AUTH_USER_MODEL], null=True, blank=True)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=400, blank=True)),
-            ('image', self.gf('django.db.models.fields.related.ForeignKey')(related_name='revisions', to=orm['djiki.Image'])),
-            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-        ))
-        db.send_create_signal(u'djiki', ['ImageRevision'])
+import djiki.models
 
 
-    def backwards(self, orm):
-        # Deleting model 'Page'
-        db.delete_table(u'djiki_page')
+class Migration(migrations.Migration):
 
-        # Deleting model 'PageRevision'
-        db.delete_table(u'djiki_pagerevision')
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-        # Deleting model 'Image'
-        db.delete_table(u'djiki_image')
-
-        # Deleting model 'ImageRevision'
-        db.delete_table(u'djiki_imagerevision')
-
-
-    models = {
-        u'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'djiki.image': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'Image'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
-        },
-        u'djiki.imagerevision': {
-            'Meta': {'ordering': "('-created',)", 'object_name': 'ImageRevision'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['" + AUTH_USER_MODEL + "']", 'null': 'True', 'blank': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '400', 'blank': 'True'}),
-            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'revisions'", 'to': u"orm['djiki.Image']"})
-        },
-        u'djiki.page': {
-            'Meta': {'ordering': "('title',)", 'object_name': 'Page'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '256'})
-        },
-        u'djiki.pagerevision': {
-            'Meta': {'ordering': "('-created',)", 'object_name': 'PageRevision'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['" + AUTH_USER_MODEL +"']", 'null': 'True', 'blank': 'True'}),
-            'content': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '400', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'page': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'revisions'", 'to': u"orm['djiki.Page']"})
-        }
-    }
-    models[AUTH_USER_MODEL] = {
-        u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-    }
-
-    complete_apps = ['djiki']
+    operations = [
+        migrations.CreateModel(
+            name='Image',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(unique=True, max_length=128, verbose_name='Name')),
+            ],
+            options={
+                'ordering': ('name',),
+            },
+            bases=(models.Model, djiki.models.Versioned),
+        ),
+        migrations.CreateModel(
+            name='ImageRevision',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='Created')),
+                ('description', models.CharField(max_length=400, verbose_name='Description', blank=True)),
+                ('file', models.FileField(upload_to=b'djimages/', verbose_name='File')),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('image', models.ForeignKey(related_name='revisions', to='djiki.Image')),
+            ],
+            options={
+                'ordering': ('-created',),
+                'abstract': False,
+            },
+        ),
+        migrations.CreateModel(
+            name='Page',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(unique=True, max_length=255, verbose_name='Title')),
+            ],
+            options={
+                'ordering': ('title',),
+            },
+            bases=(models.Model, djiki.models.Versioned),
+        ),
+        migrations.CreateModel(
+            name='PageRevision',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='Created')),
+                ('description', models.CharField(max_length=400, verbose_name='Description', blank=True)),
+                ('content', models.TextField(verbose_name='Content', blank=True)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('page', models.ForeignKey(related_name='revisions', to='djiki.Page')),
+            ],
+            options={
+                'ordering': ('-created',),
+                'abstract': False,
+            },
+        ),
+    ]
