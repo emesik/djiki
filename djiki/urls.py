@@ -1,7 +1,7 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from . import views
 
-urlpatterns = patterns('',
+urlpatterns = [
 	url(r'^(?P<title>[^/]+)$', views.view, name='djiki-page-view'),
 	url(r'^(?P<title>[^/]+)/edit/$', views.edit, name='djiki-page-edit'),
 	url(r'^(?P<title>[^/]+)/history/$', views.history, name='djiki-page-history'),
@@ -13,4 +13,4 @@ urlpatterns = patterns('',
 	url(r'^image/(?P<name>[^/]+)$', views.image_view, name='djiki-image-view'),
 	url(r'^image/(?P<name>[^/]+)/edit/$', views.image_edit, name='djiki-image-edit'),
 	url(r'^image/(?P<name>[^/]+)/history/$', views.image_history, name='djiki-image-history'),
-	)
+	]
