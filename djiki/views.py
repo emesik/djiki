@@ -46,7 +46,7 @@ def view(request, title, revision_pk=None):
 		response['Content-Disposition'] = 'attachment; filename=%s.txt' % quote(title.encode('utf-8'))
 		response.write(revision.content)
 		return response
-	return _templating.render_to_response(request, 'djiki/view.html',
+	return _templating.render(request, 'djiki/view.html',
 			{'page': page, 'revision': revision})
 
 def _prepare_preview(request, form):
@@ -91,7 +91,7 @@ def edit(request, title):
 			form.save()
 			return HttpResponseRedirect(
 					reverse('djiki-page-view', kwargs={'title': url_title}))
-	return _templating.render_to_response(request, 'djiki/edit.html',
+	return _templating.render(request, 'djiki/edit.html',
 			{'form': form, 'page': page, 'preview_content': preview_content})
 
 def history(request, title):
@@ -104,7 +104,7 @@ def history(request, title):
 	if not auth.can_view_history(request, page):
 		raise PermissionDenied
 	history = page.revisions.order_by('-created')
-	return _templating.render_to_response(request, 'djiki/history.html', {'page': page, 'history': history})
+	return _templating.render(request, 'djiki/history.html', {'page': page, 'history': history})
 
 
 def diff(request, title):
@@ -123,7 +123,7 @@ def diff(request, title):
 		return HttpResponseNotFound()
 	dmp = diff_match_patch()
 	diff = dmp.diff_compute(from_rev.content, to_rev.content, True, 2)
-	return _templating.render_to_response(request, 'djiki/diff.html',
+	return _templating.render(request, 'djiki/diff.html',
 			{'page': page, 'from_revision': from_rev, 'to_revision': to_rev, 'diff': diff})
 
 def revert(request, title, revision_pk):
@@ -160,7 +160,7 @@ def revert(request, title, revision_pk):
 					{'time': src_revision.created}
 		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page,
 				initial={'content': src_revision.content, 'description': description})
-	return _templating.render_to_response(request, 'djiki/edit.html',
+	return _templating.render(request, 'djiki/edit.html',
 			{'page': page, 'form': form, 'src_revision': src_revision,
 				'preview_content': preview_content})
 
@@ -219,7 +219,7 @@ def undo(request, title, revision_pk):
 					urlencode(urldata)))
 		form = forms.PageEditForm(data=request.POST or None, page=page,
 				initial={'content': content, 'description': description})
-	return _templating.render_to_response(request, 'djiki/edit.html',
+	return _templating.render(request, 'djiki/edit.html',
 			{'page': page, 'form': form, 'preview_content': preview_content})
 
 def image_new(request):
@@ -232,7 +232,7 @@ def image_new(request):
 			form.save()
 			return HttpResponseRedirect(
 					reverse('djiki-image-view', kwargs={'name': form.instance.image.name}))
-	return _templating.render_to_response(request, 'djiki/image_edit.html', {'form': form})
+	return _templating.render(request, 'djiki/image_edit.html', {'form': form})
 
 def image_view(request, name):
 	url_name = utils.urlize_title(name)
@@ -243,7 +243,7 @@ def image_view(request, name):
 	auth = utils.get_auth_backend()
 	if not auth.can_view(request, image):
 		raise PermissionDenied
-	return _templating.render_to_response(request, 'djiki/image_view.html', {'image': image})
+	return _templating.render(request, 'djiki/image_view.html', {'image': image})
 
 def image_edit(request, name):
 	url_name = utils.urlize_title(name)
@@ -263,7 +263,7 @@ def image_edit(request, name):
 			form.save()
 			return HttpResponseRedirect(
 					reverse('djiki-image-view', kwargs={'name': url_name}))
-	return _templating.render_to_response(request, 'djiki/image_edit.html', {'form': form})
+	return _templating.render(request, 'djiki/image_edit.html', {'form': form})
 
 def image_history(request, name):
 	url_name = utils.urlize_title(name)
@@ -275,4 +275,4 @@ def image_history(request, name):
 	if not auth.can_view_history(request, image):
 		raise PermissionDenied
 	history = image.revisions.order_by('-created')
-	return _templating.render_to_response(request, 'djiki/image_history.html', {'image': image, 'history': history})
+	return _templating.render(request, 'djiki/image_history.html', {'image': image, 'history': history})
