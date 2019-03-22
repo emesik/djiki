@@ -23,7 +23,7 @@ def view(request, title, revision_pk=None):
 	try:
 		page = models.Page.objects.get(title=page_title)
 	except models.Page.DoesNotExist:
-		html = _templating.render_to_string('djiki/not_found.html', {'title': page_title}, request)
+		html = _templating.render_to_string('djiki/not_found.html', {'title': page_title}, request=request)
 		return HttpResponseNotFound(html)
 	if not auth.can_view(request, page):
 		raise PermissionDenied
