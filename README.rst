@@ -73,6 +73,9 @@ over the standard Django template engine. Therefore you are not strictly bound
 to the default implementation. The author, for example, uses *Jinja2* in some
 of his projects.
 
+``DJIKI_IMAGES_STORAGE`` — a Python path to file storage used to keep images.
+If absent, ``DEFAULT_FILE_STORAGE`` will be used.
+
 Parsers
 -------
 

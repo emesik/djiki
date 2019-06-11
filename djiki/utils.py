@@ -16,7 +16,7 @@ def _setting_to_instance(setting):
 						'object or class' % setting)
 			module = import_module(mpath)
 			klass = getattr(module, cname)
-			parser = klass()
+			parser = klass() if isinstance(klass, type) else klass
 		return parser
 	if isinstance(setting, type):
 		return setting()
@@ -53,3 +53,9 @@ def anchorize(txt):
 def get_templating_backend():
 	setting = getattr(settings, 'DJIKI_TEMPLATING_BACKEND', 'djiki.templating.django_engine')
 	return _setting_to_instance(setting)
+
+def get_images_storage():
+	custom_storage = getattr(settings, 'DJIKI_IMAGES_STORAGE', None)
+	if custom_storage:
+		return _setting_to_instance(custom_storage)
+	return settings.DEFAULT_FILE_STORAGE

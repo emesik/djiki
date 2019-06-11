@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from . import utils
+
 class Versioned(object):
 	def last_revision(self):
 		try:
@@ -61,4 +63,6 @@ class Image(models.Model, Versioned):
 
 class ImageRevision(Revision):
 	image = models.ForeignKey(Image, related_name='revisions', on_delete=models.CASCADE)
-	file = models.FileField(_("File"), upload_to=settings.DJIKI_IMAGES_PATH)
+	file = models.FileField(_("File"),
+		storage=utils.get_images_storage(),
+		upload_to=getattr(settings, 'DJIKI_IMAGES_PATH', ''))
