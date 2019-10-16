@@ -59,3 +59,6 @@ def get_images_storage():
 	if custom_storage:
 		return _setting_to_instance(custom_storage)
 	return settings.DEFAULT_FILE_STORAGE
+
+def call_or_val(v):
+	return v() if callable(v) else v

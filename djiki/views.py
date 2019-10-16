@@ -73,7 +73,7 @@ def edit(request, title):
 		if not auth.can_create(request, page):
 			raise PermissionDenied
 	revision = models.PageRevision(page=page,
-			author=request.user if request.user.is_authenticated() else None)
+			author=request.user if utils.call_or_val(request.user.is_authenticated) else None)
 	form = forms.PageEditForm(
 			data=request.POST or None, instance=revision, page=page,
 			initial={'content': last_content})
@@ -132,7 +132,7 @@ def revert(request, title, revision_pk):
 		raise PermissionDenied
 	src_revision = get_object_or_404(models.PageRevision, page=page, pk=revision_pk)
 	new_revision = models.PageRevision(page=page,
-			author=request.user if request.user.is_authenticated() else None)
+			author=request.user if utils.call_or_val(request.user.is_authenticated) else None)
 	preview_content = None
 	if request.method == 'POST':
 		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page)
@@ -169,7 +169,7 @@ def undo(request, title, revision_pk):
 		raise PermissionDenied
 	src_revision = get_object_or_404(models.PageRevision, page=page, pk=revision_pk)
 	new_revision = models.PageRevision(page=page,
-			author=request.user if request.user.is_authenticated() else None)
+			author=request.user if utils.call_or_val(request.user.is_authenticated) else None)
 	preview_content = None
 	if request.method == 'POST':
 		form = forms.PageEditForm(data=request.POST or None, instance=new_revision, page=page)
@@ -247,7 +247,7 @@ def image_edit(request, name):
 	if not auth.can_edit(request, image):
 		raise PermissionDenied
 	revision = models.ImageRevision(image=image,
-			author=request.user if request.user.is_authenticated() else None)
+			author=request.user if utils.call_or_val(request.user.is_authenticated) else None)
 	form = forms.ImageUploadForm(data=request.POST or None, files=request.FILES or None,
 			instance=revision, image=image)
 	if request.method == 'POST':
