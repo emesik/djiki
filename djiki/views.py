@@ -6,7 +6,10 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
-from urllib import urlencode, quote
+try:
+	from urllib.parse import urlencode, quote   # py3
+except ImportError:
+	from urllib import urlencode, quote
 from . import models, forms, utils
 
 _templating = utils.get_templating_backend()

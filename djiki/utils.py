@@ -1,12 +1,13 @@
 from importlib import import_module
 import re
+import six
 import warnings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import get_language
 
 def _setting_to_instance(setting):
-	if isinstance(setting, basestring):
+	if isinstance(setting, six.string_types):
 		try:
 			parser = import_module(setting)
 		except ImportError:
