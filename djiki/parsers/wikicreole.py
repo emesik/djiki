@@ -1,6 +1,12 @@
 import re
-from creole import Parser
-from creole.html_emitter import HtmlEmitter
+try:
+	from creole.parser.creol2html_parser import CreoleParser	# py3
+except ImportError:
+	from creole import Parser as CreoleParser					# py2
+try:
+	from creole.emitter.creol2html_emitter import HtmlEmitter	# py3
+except ImportError:
+	from creole.html_emitter import HtmlEmitter
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 
@@ -61,5 +67,5 @@ class DjikiHtmlEmitter(HtmlEmitter):
 		return render_to_string('djiki/parser/image.html', ctx)
 
 def render(src):
-	doc = Parser(src).parse()
+	doc = CreoleParser(src).parse()
 	return DjikiHtmlEmitter(doc).emit().encode('utf-8', 'ignore')
