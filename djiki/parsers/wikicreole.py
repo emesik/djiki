@@ -3,7 +3,10 @@ try:
 	from creole.parser.creol2html_parser import CreoleParser	# py3
 except ImportError:
 	from creole import Parser as CreoleParser					# py2
-from creole.html_emitter import HtmlEmitter
+try:
+	from creole.emitter.creol2html_emitter import HtmlEmitter	# py3
+except ImportError:
+	from creole.html_emitter import HtmlEmitter
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 
