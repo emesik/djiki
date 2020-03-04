@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(max_length=400, verbose_name='Description', blank=True)),
                 ('file', models.FileField(upload_to=b'djimages/', verbose_name='File')),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
-                ('image', models.ForeignKey(related_name='revisions', to='djiki.Image')),
+                ('image', models.ForeignKey(related_name='revisions', to='djiki.Image', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ('-created',),
@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(max_length=400, verbose_name='Description', blank=True)),
                 ('content', models.TextField(verbose_name='Content', blank=True)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
-                ('page', models.ForeignKey(related_name='revisions', to='djiki.Page')),
+                ('page', models.ForeignKey(related_name='revisions', to='djiki.Page', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ('-created',),
