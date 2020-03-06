@@ -6,7 +6,10 @@ try:
 except ImportError:
 	# django < 1.5
 	from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+try:
+	from django.urls import reverse		# django >= 2.0
+except ImportError:
+	from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 from django.utils.translation import get_language

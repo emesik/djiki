@@ -1,7 +1,10 @@
 from diff_match_patch import diff_match_patch
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+try:
+	from django.urls import reverse		# django >= 2.0
+except ImportError:
+	from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
