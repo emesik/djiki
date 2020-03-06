@@ -7,7 +7,10 @@ try:
 	from creole.emitter.creol2html_emitter import HtmlEmitter	# py3
 except ImportError:
 	from creole.html_emitter import HtmlEmitter
-from django.core.urlresolvers import reverse
+try:
+	from django.urls import reverse		# django >= 2.0
+except ImportError:
+	from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 
 from .. import models, utils
