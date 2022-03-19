@@ -1,5 +1,8 @@
 Djiki
 =====
+
+The latest release is 0.8
+
 Djiki is a lightweight, portable Wiki engine based on Django. It offers full functionality
 of a wiki engine without any configuration, yet it might be easily customized to match
 your preferred environment.
@@ -7,13 +10,14 @@ your preferred environment.
 Features:
 
 * Creole markup,
-* anonymous and registered edits,
+* anonymous and authenticated edits,
 * automatic merges of parallel edits when possible,
 * inclusion of images,
 * diff views between revisions,
 * reverts to any revision in the history,
-* automatic undos of any historical revision, if possible.
-* not strictly bound to Django user model and template engine, you may replace them
+* automatic undoes of any historical revision, if possible.
+* not strictly bound to Django user model and template engine, you may replace them,
+* multiple languages support (no internal linking of equivalent pages yet).
 
 Requirements
 ------------
@@ -110,5 +114,4 @@ Roadmap
 
 * more markup backends; MediaWiki is the main priority
 * page operations: rename, delete
-* multi-language support, interwiki links
 * translations
