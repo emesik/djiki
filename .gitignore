@@ -1,5 +1,8 @@
 .*
 !.gitignore
+!.editorconfig
+!.bumpversion.cfg
+!.pre-commit-config.yaml
 *.py[co]
 *.swp
 *.db
