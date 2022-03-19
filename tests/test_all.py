@@ -1,22 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-
-try:
-    from django.contrib.auth import get_user_model
-
-    User = get_user_model()
-except ImportError:
-    # django < 1.5
-    from django.contrib.auth.models import User
-try:
-    from django.urls import reverse  # django >= 2.0
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.contrib.auth import get_user_model
+from django.urls import reverse
 from django.test import TestCase
 from django.test.client import Client
 from django.utils.translation import get_language
-from . import models
-from .auth.base import UnrestrictedAccess
+
+from djiki import models
+from djiki.auth.base import UnrestrictedAccess
+
+User = get_user_model()
 
 content1 = """
 = Hello world! =
