@@ -11,31 +11,25 @@ from djiki.auth.base import UnrestrictedAccess
 
 User = get_user_model()
 
-content1 = """
-= Hello world! =
+content1 = """= Hello world! =
 
-This is a simple test page.
-"""
+This is a simple test page."""
 description1 = "Initial page version"
 content2 = (
     content1
-    + """
-== Subsection ==
+    + """== Subsection ==
 
-This page has a subsection.
-"""
+This page has a subsection."""
 )
 description2 = "Subsection added"
-content3 = """
-= Hello world! =
+content3 = """= Hello world! =
 
 Some text added here.
 This is a simple test page.
 
 == Subsection ==
 
-This page has a subsection.
-"""
+This page has a subsection."""
 description3 = "Added some text"
 
 
