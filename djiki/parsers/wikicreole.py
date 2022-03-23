@@ -1,18 +1,8 @@
-import re
-
-try:
-    from creole.parser.creol2html_parser import CreoleParser  # py3
-except ImportError:
-    from creole import Parser as CreoleParser  # py2
-try:
-    from creole.emitter.creol2html_emitter import HtmlEmitter  # py3
-except ImportError:
-    from creole.html_emitter import HtmlEmitter
-try:
-    from django.urls import reverse  # django >= 2.0
-except ImportError:
-    from django.core.urlresolvers import reverse
+from creole import Parser as CreoleParser
+from creole.html_emitter import HtmlEmitter
 from django.template.loader import render_to_string
+from django.urls import reverse
+import re
 
 from .. import models, utils
 
