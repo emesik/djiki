@@ -3,35 +3,35 @@
 {% block title %}{% trans "Image history" %}: {{ block.super }}{% endblock %}
 {% block djiki_main %}
 <div class="page history grid_12">
-	<div class="content">
-		<h1>{{ image.name }}</h1>
-		<table>
-			<thead>
-				<tr>
-					<th>{% trans "Modification time" %}</th>
-					<th>{% trans "Author" %}</th>
-					<th>{% trans "Thumbnail" %}</th>
-					<th>{% trans "Description" %}</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for revision in history %}
-				<tr>
-					<td>{{ revision.created }}</td>
-					<td>
-						{% if revision.author %}{{ revision.author }}
-						{% else %}<em>{% trans "anonymous" %}</em>{% endif %}
-					</td>
-					<td>
-						{% thumbnail revision.file "200x150" as thumb %}
-						<a href="{{ MEDIA_URL }}{{ revision.file }}"><img src="{{ thumb.url }}" alt="" /></a>
-						{% endthumbnail %}
-					</td>
-					<td>{{ revision.description }}</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+  <div class="content">
+    <h1>{{ image.name }}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Modification time" %}</th>
+          <th>{% trans "Author" %}</th>
+          <th>{% trans "Thumbnail" %}</th>
+          <th>{% trans "Description" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for revision in history %}
+        <tr>
+          <td>{{ revision.created }}</td>
+          <td>
+            {% if revision.author %}{{ revision.author }}
+            {% else %}<em>{% trans "anonymous" %}</em>{% endif %}
+          </td>
+          <td>
+            {% thumbnail revision.file "200x150" as thumb %}
+            <a href="{{ MEDIA_URL }}{{ revision.file }}"><img src="{{ thumb.url }}" alt="" /></a>
+            {% endthumbnail %}
+          </td>
+          <td>{{ revision.description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

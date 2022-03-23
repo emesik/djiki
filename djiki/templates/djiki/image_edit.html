@@ -3,16 +3,16 @@
 {% block title %}{% trans "New image" %}: {{ block.super }}{% endblock %}
 {% block djiki_main %}
 <div class="page edit grid_12">
-	<div class="content">
-		<h1>{% if form.image %}{{ form.image.name }}{% else %}{% trans "New image" %}{% endif %}</h1>
-		<form enctype="multipart/form-data" method="post" action="">
-			<fieldset>{% csrf_token %}
-				{{ form.as_p }}
-			</fieldset>
-			<div class="buttons">
-				<button type="submit">{% trans "Save" %}</button>
-			</div>
-		</form>
-	</div>
+  <div class="content">
+    <h1>{% if form.image %}{{ form.image.name }}{% else %}{% trans "New image" %}{% endif %}</h1>
+    <form enctype="multipart/form-data" method="post" action="">
+      <fieldset>{% csrf_token %}
+        {{ form.as_p }}
+      </fieldset>
+      <div class="buttons">
+        <button type="submit">{% trans "Save" %}</button>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

@@ -3,45 +3,45 @@
 {% block title %}{% trans "Page history" %}: {{ block.super }}{% endblock %}
 {% block djiki_main %}
 <div class="page history grid_12">
-	<div class="content">
-		<h1>{{ page.title }}</h1>
-		<form method="get" action="{% url 'djiki-page-diff' page.title|urlize_title %}">
-		<table>
-			<thead>
-				<tr>
-					<th>{% trans "Modification time" %}</th>
-					<th><button type="submit">{% trans "Compare" %}</button></th>
-					<th>{% trans "Author" %}</th>
-					<th>{% trans "Description" %}</th>
-					<th>{% trans "Operations" %}</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for revision in history %}
-				<tr>
-					<td>
-						<a href="{% url 'djiki-page-revision' page.title|urlize_title revision.pk %}" title="{% trans "View" %}">
-						{{ revision.created }}</a>
-						<span class="help_text">({% blocktrans with revision.created|timesince as timesince %}{{ timesince }} ago{% endblocktrans %})</span>
-					</td>
-					<td>
-						<input type="radio" name="from_revision_pk" value="{{ revision.pk }}" />
-						<input type="radio" name="to_revision_pk" value="{{ revision.pk }}" />
-					</td>
-					<td>
-						{% if revision.author %}{{ revision.author }}
-						{% else %}<em>{% trans "anonymous" %}</em>{% endif %}
-					</td>
-					<td>{{ revision.description }}</td>
-					<td>
-						<a href="{% url 'djiki-page-revert' page.title|urlize_title revision.pk %}" rel="nofollow" title="{% trans "Revert to this version by discarding all later modifications." %}">[{% trans "revert" %}]</a>
-						<a href="{% url 'djiki-page-undo' page.title|urlize_title revision.pk %}" rel="nofollow" title="{% trans "Undo this revision." %}">[{% trans "undo" %}]</a>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-		</form>
-	</div>
+  <div class="content">
+    <h1>{{ page.title }}</h1>
+    <form method="get" action="{% url 'djiki-page-diff' page.title|urlize_title %}">
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Modification time" %}</th>
+          <th><button type="submit">{% trans "Compare" %}</button></th>
+          <th>{% trans "Author" %}</th>
+          <th>{% trans "Description" %}</th>
+          <th>{% trans "Operations" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for revision in history %}
+        <tr>
+          <td>
+            <a href="{% url 'djiki-page-revision' page.title|urlize_title revision.pk %}" title="{% trans "View" %}">
+            {{ revision.created }}</a>
+            <span class="help_text">({% blocktrans with revision.created|timesince as timesince %}{{ timesince }} ago{% endblocktrans %})</span>
+          </td>
+          <td>
+            <input type="radio" name="from_revision_pk" value="{{ revision.pk }}" />
+            <input type="radio" name="to_revision_pk" value="{{ revision.pk }}" />
+          </td>
+          <td>
+            {% if revision.author %}{{ revision.author }}
+            {% else %}<em>{% trans "anonymous" %}</em>{% endif %}
+          </td>
+          <td>{{ revision.description }}</td>
+          <td>
+            <a href="{% url 'djiki-page-revert' page.title|urlize_title revision.pk %}" rel="nofollow" title="{% trans "Revert to this version by discarding all later modifications." %}">[{% trans "revert" %}]</a>
+            <a href="{% url 'djiki-page-undo' page.title|urlize_title revision.pk %}" rel="nofollow" title="{% trans "Undo this revision." %}">[{% trans "undo" %}]</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </form>
+  </div>
 </div>
 {% endblock %}
