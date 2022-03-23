@@ -1,0 +1,8 @@
+black
+coverage
+coveralls
+pip
+pytest-cov
+pytest-django
+pytest-runner
+pytest
