@@ -57,6 +57,14 @@ class SimpleTest(TestCase):
         self.user_client.login(username="foouser", password=user_password)
         self.admin_client.login(username="admin", password=admin_password)
 
+    def _format_content(self, content):
+        return "\n".join(
+            [
+                "{:4d}: {:s}".format(num, line)
+                for num, line in enumerate(content.decode().splitlines())
+            ]
+        )
+
     def _page_edit(self, title, content, description="", username=None, password=None):
         client = Client()
         if username:
@@ -71,7 +79,7 @@ class SimpleTest(TestCase):
         except IndexError:
             prev_rev = ""
         r = client.get(reverse("djiki-page-edit", kwargs={"title": title}))
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, 200, self._format_content(r.content))
         r = client.post(
             reverse("djiki-page-edit", kwargs={"title": title}),
             {
@@ -82,7 +90,7 @@ class SimpleTest(TestCase):
                 "language": get_language(),
             },
         )
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, 200, self._format_content(r.content))
         r = client.post(
             reverse("djiki-page-edit", kwargs={"title": title}),
             {
@@ -92,7 +100,7 @@ class SimpleTest(TestCase):
                 "language": get_language(),
             },
         )
-        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.status_code, 302, self._format_content(r.content))
         p = models.Page.objects.get(title=title)
         self.assertEqual(p.revisions.count(), rev_count + 1)
         self.assertEqual(p.last_revision().content, content)
