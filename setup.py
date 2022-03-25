@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
+import re
 from distutils.core import setup
 from setuptools import find_packages
 
 version = __import__("djiki").__version__
+
+
+def flatten_repo_links(line):
+    if mo := re.match(r"^\s*-e.+egg=(.+)$", line):
+        return mo.groups()[0]
+    return line
+
 
 setup(
     name="djiki",
@@ -13,7 +21,9 @@ setup(
     author="Michał Sałaban",
     author_email="michal@salaban.info",
     license="BSD-3-Clause",
-    install_requires=open("requirements.txt", "r").read().splitlines(),
+    install_requires=map(
+        flatten_repo_links, open("requirements.txt", "r").read().splitlines()
+    ),
     tests_require=open("test_requirements.txt", "r").read().splitlines(),
     packages=find_packages(".", exclude=["tests"]),
     include_package_data=True,
