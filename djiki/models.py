@@ -47,7 +47,7 @@ class Page(models.Model, Versioned):
         ordering = ("title",)
         unique_together = ("title", "language")
 
-    def __unicode__(self):
+    def __str__(self):
         if self.language:
             return "%s:%s" % (self.language, self.title)
         return self.title
@@ -57,7 +57,7 @@ class PageRevision(Revision):
     page = models.ForeignKey(Page, related_name="revisions", on_delete=models.CASCADE)
     content = models.TextField(_("Content"), blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s: %s" % (self.page, self.description)
 
 
@@ -67,7 +67,7 @@ class Image(models.Model, Versioned):
     class Meta:
         ordering = ("name",)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 

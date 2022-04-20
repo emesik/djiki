@@ -113,7 +113,7 @@ class NewImageUploadForm(forms.ModelForm):
     def _get_name(self):
         name = self.cleaned_data["name"]
         if not name:
-            name = unicode(self.cleaned_data["file"])
+            name = str(self.cleaned_data["file"])
         return name
 
     def clean(self):
