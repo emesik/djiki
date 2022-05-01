@@ -1,21 +1,23 @@
 {% load thumbnail %}
-<div class="image{% if size %} with_size{% endif %}{% if not image %} external{% endif %}">
-  {% if image %}
-  <a href="{% url 'djiki-image-view' url_name %}">
-  {% if size %}
-    {% thumbnail image.last_revision.file size as img %}
-    <img src="{{ img.url }}" alt="{{ title }}" />
-    {% endthumbnail %}
-  {% else %}
-    {% thumbnail image.last_revision.file "912x912" as img %}
-    <img src="{{ img.url }}" alt="{{ title }}" />
-    {% endthumbnail %}
-  {% endif %}
-  </a>
-  {% else %}
-  <img src="{{ url }}" alt="{{ title }}" />
-  {% endif %}
-  {% if title %}
-  <p class="title">{{ title }}</p>
-  {% endif %}
+<div class="djiki-image djiki-image--embedded">
+  <div class="image{% if size %} with_size{% endif %}{% if not image %} external{% endif %}">
+    {% if image %}
+    <a href="{% url 'djiki-image-view' url_name %}">
+    {% if size %}
+      {% thumbnail image.last_revision.file size as img %}
+      <img src="{{ img.url }}" alt="{{ title }}" />
+      {% endthumbnail %}
+    {% else %}
+      {% thumbnail image.last_revision.file "912x912" as img %}
+      <img src="{{ img.url }}" alt="{{ title }}" />
+      {% endthumbnail %}
+    {% endif %}
+    </a>
+    {% else %}
+    <img src="{{ url }}" alt="{{ title }}" />
+    {% endif %}
+    {% if title %}
+    <p class="title">{{ title }}</p>
+    {% endif %}
+  </div>
 </div>

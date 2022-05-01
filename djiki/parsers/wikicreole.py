@@ -27,7 +27,10 @@ class DjikiHtmlEmitter(HtmlEmitter):
         m = self.link_rules.addr_re.match(target)
         if m:
             if m.group("extern_addr"):
-                return '<a href="%s">%s</a>' % (self.attr_escape(target), inside)
+                return '<a class="djiki-link--external" href="%s">%s</a>' % (
+                    self.attr_escape(target),
+                    inside,
+                )
             elif m.group("inter_wiki"):
                 raise NotImplementedError
         if "/" in target:
@@ -35,7 +38,7 @@ class DjikiHtmlEmitter(HtmlEmitter):
             # would cause a crash in reverse() call.
             # FIXME: The node should be passed verbatim.
             return "[[%s|%s]]" % (node.content, inside)
-        return '<a href="%s">%s</a>' % (
+        return '<a class="djiki-link--internal" href="%s">%s</a>' % (
             reverse(
                 "djiki-page-view",
                 kwargs={"title": utils.urlize_title(self.attr_escape(target))},

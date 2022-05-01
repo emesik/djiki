@@ -1,9 +1,9 @@
 {% extends 'djiki/base_image.html' %}
 {% load thumbnail %}
 {% block djiki_main %}
-<div class="page content grid_12">
-  <div class="content">
-    <h1>{{ image.name }}</h1>
+<div class="djiki-image djiki-image--view">
+  <div class="djiki-image-view">
+    <h1 class="djiki-image-name">{{ image.name }}</h1>
     {% thumbnail image.last_revision.file "920x920" as img %}
     <a href="{{ MEDIA_URL }}{{ image.last_revision.file }}"><img src="{{ img.url }}" alt="{{ image.name }}" /></a>
     {% endthumbnail %}

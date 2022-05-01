@@ -79,10 +79,8 @@ def get_lang():
 
 
 def get_images_storage():
-    custom_storage = getattr(settings, "DJIKI_IMAGES_STORAGE", None)
-    if custom_storage:
-        return _setting_to_instance(custom_storage)
-    return settings.DEFAULT_FILE_STORAGE
+    storage = getattr(settings, "DJIKI_IMAGES_STORAGE", settings.DEFAULT_FILE_STORAGE)
+    return _setting_to_instance(storage)
 
 
 def call_or_val(v):

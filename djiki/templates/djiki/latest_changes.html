@@ -2,9 +2,9 @@
 {% load i18n djiki_tags %}
 {% block title %}{% trans "Latest changes" %} | {{ block.super }}{% endblock %}
 {% block djiki_main %}
-<div class="page latest grid_12">
-  <div class="content">
-    <h1>{% trans "Latest changes" %}</h1>
+<div class="djiki-common djiki-common--latest-changes">
+  <div class="djiki-latest-changes">
+    <h1 class="djiki-common-title">{% trans "Latest changes" %}</h1>
     <table>
       <thead>
         <tr>

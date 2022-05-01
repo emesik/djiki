@@ -2,9 +2,9 @@
 {% load i18n thumbnail %}
 {% block title %}{% trans "Image history" %}: {{ block.super }}{% endblock %}
 {% block djiki_main %}
-<div class="page history grid_12">
-  <div class="content">
-    <h1>{{ image.name }}</h1>
+<div class="djiki-image djiki-image--history">
+  <div class="djiki-image-history">
+    <h1 class="djiki-image-name">{{ image.name }}</h1>
     <table>
       <thead>
         <tr>

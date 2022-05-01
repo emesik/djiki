@@ -1,14 +1,19 @@
 {% extends 'djiki/base.html' %}
 {% load i18n djiki_tags %}
 {% block djiki_main %}
-<p>
-{% blocktrans %}The page with title <strong>{{ title }}</strong> does not exist.
-Please make sure your spelling is correct.
-{% endblocktrans %}
-</p>
-<p>{% url 'djiki-page-edit' title|urlize_title as edit_url %}
-{% blocktrans %}You may also <a href="{{ edit_url }}">create a new page</a>
-named <strong>{{ title }}</strong>.
-{% endblocktrans %}
-</p>
+<div class="djiki-common djiki-common--not-found">
+  <div class="djiki-not-found">
+    <h1 class="djiki-common-title">{% trans "Not found" %}</h1>
+    <p>
+    {% blocktrans %}The page with title <strong>{{ title }}</strong> does not exist.
+    Please make sure your spelling is correct.
+    {% endblocktrans %}
+    </p>
+    <p>{% url 'djiki-page-edit' title|urlize_title as edit_url %}
+    {% blocktrans %}You may also <a href="{{ edit_url }}">create a new page</a>
+    named <strong>{{ title }}</strong>.
+    {% endblocktrans %}
+    </p>
+  </div>
+</div>
 {% endblock %}

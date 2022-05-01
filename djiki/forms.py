@@ -11,7 +11,6 @@ class PageEditForm(forms.ModelForm):
         widget=forms.HiddenInput(),
         required=False,
     )
-    language = forms.ChoiceField(choices=settings.LANGUAGES, widget=forms.HiddenInput)
 
     class Meta:
         model = models.PageRevision
@@ -23,7 +22,6 @@ class PageEditForm(forms.ModelForm):
         if self.page.pk:
             self.fields["prev_revision"].queryset = self.page.revisions.all()
             self.fields["prev_revision"].initial = self.page.last_revision()
-        self.fields["language"].initial = self.page.language
 
     def _rebase(self, base, latest, our):
         dmp = diff_match_patch()
@@ -129,6 +127,7 @@ class NewImageUploadForm(forms.ModelForm):
         return self.cleaned_data
 
     def save(self, *args, **kwargs):
+        # we're saving the first revision; create parent Image object
         image = models.Image(name=utils.deurlize_title(self._get_name()))
         image.save()
         self.instance.image = image

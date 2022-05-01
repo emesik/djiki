@@ -3,10 +3,9 @@
 {% block title %}{% trans "Image" %}: {{ image.name }} | {{ block.super }}{% endblock %}
 {% block djiki_actions %}
 <ul>
-  <li><a href="{% url 'djiki-image-view' image.name|urlize_title %}">{% trans "Image" %}</a></li>
-  <li><a href="{% url 'djiki-image-edit' image.name|urlize_title %}" rel="nofollow">{% trans "Edit image" %}</a></li>
-  <li><a href="{% url 'djiki-image-history' image.name|urlize_title %}" rel="nofollow">{% trans "History" %}</a></li>
-  <li><a href="{% url 'djiki-image-new' %}" rel="nofollow">{% trans "Upload" %}</a></li>
+  <li class="djiki-action--image-view"><a href="{% url 'djiki-image-view' image.name|urlize_title %}">{% trans "Image" %}</a></li>
+  <li class="djiki-action--image-edit"><a href="{% url 'djiki-image-edit' image.name|urlize_title %}" rel="nofollow">{% trans "Edit image" %}</a></li>
+  <li class="djiki-action--image-history"><a href="{% url 'djiki-image-history' image.name|urlize_title %}" rel="nofollow">{% trans "History" %}</a></li>
+  <li class="djiki-action--image-upload"><a href="{% url 'djiki-image-new' %}" rel="nofollow">{% trans "Upload" %}</a></li>
 </ul>
-<div class="clear"></div>
 {% endblock %}
