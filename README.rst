@@ -1,7 +1,7 @@
 Djiki
 =====
 
-The latest release is 0.8
+The latest release is 0.9
 
 Djiki is a lightweight, portable Wiki engine based on Django. It offers full functionality
 of a wiki engine without any configuration, yet it might be easily customized to match
